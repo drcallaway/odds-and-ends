@@ -1,0 +1,1157 @@
+<html>
+<body>
+<div style="border:none;border-bottom:solid windowtext 1.0pt;padding:0in 0in 1.0pt 0in">
+
+<h2 style="padding:0px 0px 2px;font-size:1.6em;margin:2em 0px 0.5em;border-bottom-color:rgb(145,150,153);border-bottom-width:1px;border-bottom-style:solid;font-family:Arial,Helvetica,FreeSans,sans-serif">Introduction to REST</h2>
+<p style="line-height:17.328125px;color:rgb(51,51,51);background-image:none;padding:0px;margin-bottom:10px;font-family:Arial,Helvetica,FreeSans,sans-serif">REST (or "Representationl State Transfer") is an architectural style for exposing services over standard HTTP/S protocols. It was first proposed in 2000 by Roy Fielding in his doctoral thesis titled&nbsp;<em>Architectural Styles and the Design of Network-based Software Architectures</em>.</p>
+<h3 style="padding:0px;font-size:1.4em;margin:1.5em 0px 0.5em;font-family:Arial,Helvetica,FreeSans,sans-serif">REST Constraints</h3>
+<p style="line-height:17.328125px;color:rgb(51,51,51);background-image:none;padding:0px;margin-bottom:10px;font-family:Arial,Helvetica,FreeSans,sans-serif">REST specifies the constraints to which a service must adhere in order to be considered "RESTful". RESTful services are simple, consistent, and work in harmony with existing Web infrastructure. In fact, the World Wide Web itself is the largest implementation of a RESTful architecture. The fundamental REST constraints are as follows:</p>
+<div style="overflow:auto;color:rgb(51,51,51);font-family:Arial,Helvetica,FreeSans,sans-serif;line-height:17.328125px">
+<table style="font-size:10pt;line-height:13pt;border:0px;margin-bottom:10px;padding:0px;clear:left;background-image:none;border-collapse:collapse">
+<tbody>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<th style="margin:0px;padding:5px 7px;vertical-align:top;font-size:10pt;line-height:13pt;color:rgb(0,0,0);border:1px solid rgb(221,221,221);min-width:0.6em;background-color:rgb(240,240,240)">Constraint</th>
+<th style="margin:0px;padding:5px 7px;vertical-align:top;font-size:10pt;line-height:13pt;color:rgb(0,0,0);border:1px solid rgb(221,221,221);min-width:0.6em;background-color:rgb(240,240,240)">Description</th>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">Client-server</td>
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">A clear "separation of concerns" is provided by dividing responsibilities between clients and servers. This means that clients are not concerned with activities like storing resource data and servers are not responsible for maintaining user state or creating a user interface.</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">Stateless</td>
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">In order to decrease coupling and improve scalability, servers should be "stateless". This means that session state is maintained on the client and no user-specific information is stored on the server. To that end, every request must contain all of the information required to satisfy the request.</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">Cacheable</td>
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">To improve scalability and performance, REST clients and network intermediaries are allowed to cache responses. To facilitate caching, REST responses should indicate whether or not they are cacheable and for how long.</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">Layered system</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">Like the Web at large, REST services support routing requests through network intermediaries during transit to the destination server. These intermediaries can add value such as load balancing or local caching in order to further improve scalability and performance.</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">Uniform interface</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">A uniform interface specifies the standard by which REST clients and servers communicate. This&nbsp;<span style="margin-top:0px">allows each side to evolve independently and&nbsp;</span>simplifies re-use since all REST services expose a consistent interface.</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">Code on Demand</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">Code on demand is an optional constraint that dictates that it is permissible for the server to return business logic that will be executed on the client. Client-side JavaScript, Java applets, and Flash applications are examples of code on demand logic.</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:0px;margin-top:0px"><span style="color:rgb(255,255,255)">..........................</span></p>
+</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 style="padding:0px;font-size:1.4em;margin:1.5em 0px 0.5em;font-family:Arial,Helvetica,FreeSans,sans-serif">REST Principles</h3>
+<p style="line-height:17.328125px;color:rgb(51,51,51);background-image:none;padding:0px;margin-bottom:10px;font-family:Arial,Helvetica,FreeSans,sans-serif">REST services are "resource oriented". This means that they perform work by manipulating uniquely identifiable resources in a prescribed fashion. What is a resource? A resource is a server-side entity that represents a concrete idea such as a customer or an order (the "nouns" in the system). Resources are typically mapped to a file or database table wherein information about the resource is persisted.&nbsp;A REST API exposes the ability to perform a small set of operations on these resources.&nbsp;The operations by which resources can be manipulated are prescribed by the HTTP methods POST, GET, PUT, and DELETE to support create, read, update, and delete actions (the "verbs" in the system) against specific resources. These actions are often referred to as "CRUD" operations (for create, read, update, delete).</p>
+<p style="line-height:17.328125px;color:rgb(51,51,51);background-image:none;padding:0px;margin-bottom:10px;font-family:Arial,Helvetica,FreeSans,sans-serif">The term "Representational State Transfer" indicates that resources are created, retrieved, and modified using representations of those resources. For example, a customer record in a database could be created by the client passing a "representation" of the customer in JSON or XML format. The JSON or XML message isn't the resource itself but a representation containing information sufficient to create the server-side resource. Roy Fielding described REST in this manner:</p>
+<blockquote style="font-style:italic;border-left-width:1px;border-left-style:solid;padding:0px 20px;margin:10px 20px;border-left-color:rgb(60,120,181);color:rgb(51,51,51);font-family:Arial,Helvetica,FreeSans,sans-serif;line-height:17.328125px">
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:0px">"Representational State Transfer is intended to evoke an image of how a well-designed Web application behaves: a network of web pages (a virtual state-machine), where the user progresses through an application by selecting links (state transitions), resulting in the next page (representing the next state of the application) being transferred to the user and rendered for their use."</p>
+</blockquote>
+<p style="line-height:17.328125px;color:rgb(51,51,51);background-image:none;padding:0px;margin-bottom:10px;font-family:Arial,Helvetica,FreeSans,sans-serif">REST services are based on these fundamental principles:</p>
+<ol style="margin:1em 0px;padding-left:3em;line-height:17.328125px;padding-top:0px;color:rgb(51,51,51);font-family:Arial,Helvetica,FreeSans,sans-serif"><li style="font-size:10pt;line-height:13pt;margin:0px;padding:0px">All resources are uniquely addressable via a URI (Uniform Resource Identifier).</li>
+<li style="font-size:10pt;line-height:13pt;margin:0px;padding:0px">Resources are manipulated using standard HTTP methods (e.g., POST, GET, PUT, DELETE) and representations (e.g., JSON or XML).</li>
+<li style="font-size:10pt;line-height:13pt;margin:0px;padding:0px">Messages are "self-descriptive" such that they specify the format of the payload as well as other metadata (e.g., cache instructions, verision information, etc.).</li>
+<li style="font-size:10pt;line-height:13pt;margin:0px;padding:0px">Other than a few fixed entry points, resource locations (i.e., URIs) are provided dynamically in the body of returned representations. This concept facilitates what is known as a "connected" service since the client can "discover" all permissible actions by simply exercising the API (excluding the initial entry point).</li>
+</ol>
+<p style="line-height:17.328125px;color:rgb(51,51,51);background-image:none;padding:0px;margin-bottom:10px;font-family:Arial,Helvetica,FreeSans,sans-serif">These fundamental principles make REST services consistent in their interface and flexible in their implementation.</p>
+<h2 style="padding:0px 0px 2px;font-size:1.6em;margin:2em 0px 0.5em;border-bottom-color:rgb(145,150,153);border-bottom-width:1px;border-bottom-style:solid;font-family:Arial,Helvetica,FreeSans,sans-serif">Designing a REST API</h2>
+<p style="line-height:17.328125px;color:rgb(51,51,51);background-image:none;padding:0px;margin-bottom:10px;font-family:Arial,Helvetica,FreeSans,sans-serif">Typically, the first step in building a REST service is to design the API by which clients will access server-side resources.&nbsp;Essentially, there are four important elements in each REST service call that must be defined by the API author. These elements are as follows:</p>
+<ul style="margin:1em 0px;padding-left:3em;line-height:17.328125px;padding-top:0px;color:rgb(51,51,51);font-family:Arial,Helvetica,FreeSans,sans-serif"><li style="font-size:10pt;line-height:13pt;margin:0px;padding:0px">HTTP method</li>
+<li style="font-size:10pt;line-height:13pt;margin:0px;padding:0px">Resource URI</li>
+<li style="font-size:10pt;line-height:13pt;margin:0px;padding:0px">Request headers and body</li>
+<li style="font-size:10pt;line-height:13pt;margin:0px;padding:0px">Response status code and body</li></ul>
+<p style="line-height:17.328125px;color:rgb(51,51,51);background-image:none;padding:0px;margin-bottom:10px;font-family:Arial,Helvetica,FreeSans,sans-serif">Let's take a closer look at each of these elements.</p>
+<h3 style="padding:0px;font-size:1.4em;margin:1.5em 0px 0.5em;font-family:Arial,Helvetica,FreeSans,sans-serif">HTTP Method</h3>
+<p style="line-height:17.328125px;color:rgb(51,51,51);background-image:none;padding:0px;margin-bottom:10px;font-family:Arial,Helvetica,FreeSans,sans-serif">The HTTP method indicates the type of action that should be taken on the resource specified in the URI. RESTful services typically use four methods that roughly equate the standard CRUD (create, read, update, delete) operations as follows:</p>
+<div style="overflow:auto;color:rgb(51,51,51);font-family:Arial,Helvetica,FreeSans,sans-serif;line-height:17.328125px">
+<table style="font-size:10pt;line-height:13pt;border:0px;margin-bottom:10px;padding:0px;clear:left;background-image:none;border-collapse:collapse">
+<tbody>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<th style="margin:0px;padding:5px 7px;vertical-align:top;font-size:10pt;line-height:13pt;color:rgb(0,0,0);border:1px solid rgb(221,221,221);min-width:0.6em;background-color:rgb(240,240,240)">HTTP Method</th>
+<th style="margin:0px;padding:5px 7px;vertical-align:top;font-size:10pt;line-height:13pt;color:rgb(0,0,0);border:1px solid rgb(221,221,221);min-width:0.6em;background-color:rgb(240,240,240)">CRUD Operation</th>
+<th colspan="1" style="margin:0px;padding:5px 7px;vertical-align:top;font-size:10pt;line-height:13pt;color:rgb(0,0,0);border:1px solid rgb(221,221,221);min-width:0.6em;background-color:rgb(240,240,240)">Safe</th>
+<th colspan="1" style="margin:0px;padding:5px 7px;vertical-align:top;font-size:10pt;line-height:13pt;color:rgb(0,0,0);border:1px solid rgb(221,221,221);min-width:0.6em;background-color:rgb(240,240,240)">Idempotent</th>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><span style="margin-top:0px">GET</span></td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><span style="margin-top:0px">Read a resource</span></td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">yes</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">yes</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">POST</td>
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">Create a new resource whose URI is assigned by the server</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">no</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">no</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">PUT</td>
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">Update an existing resource or create a new resource whose URI is defined by the client</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">no</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">yes</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">DELETE</td>
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">Delete a resource</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">no</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">yes</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p style="line-height:17.328125px;color:rgb(51,51,51);background-image:none;padding:0px;margin-bottom:10px;font-family:Arial,Helvetica,FreeSans,sans-serif">The meaning behind the safe and idempotent columns are described below.</p>
+<p style="line-height:17.328125px;color:rgb(51,51,51);background-image:none;padding:0px;margin-bottom:10px;font-family:Arial,Helvetica,FreeSans,sans-serif">The GET method is used for calls that have no side effects on the server (any calls that have no side effects should use GET).&nbsp;An example of this would be when retrieving information about a book. No transaction is taking place so the book can be retrieved any number of times without altering state on the server.&nbsp;In REST terminology, calls that do not modify server state are referred to as&nbsp;<em>safe</em>. GET is the only safe HTTP method. A typical GET method call looks like this:</p>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible;color:rgb(51,51,51);line-height:17.328125px">GET http://{host:port}/library/v1/books/0201709066</pre>
+<p style="line-height:17.328125px;color:rgb(51,51,51);background-image:none;padding:0px;margin-bottom:10px;font-family:Arial,Helvetica,FreeSans,sans-serif">You may have noticed in the table above that the PUT and POST operations can both be used to create resources. This has been a cause of much confusion when creating REST services. Here is a hint from the book&nbsp;<em>RESTful Web Services</em>&nbsp;to help you decide when to use each method:</p>
+<blockquote style="font-style:italic;border-left-width:1px;border-left-style:solid;padding:0px 20px;margin:10px 20px;border-left-color:rgb(60,120,181);color:rgb(51,51,51);font-family:Arial,Helvetica,FreeSans,sans-serif;line-height:17.328125px">
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:0px">The difference between PUT and POST is this: the client uses PUT when it’s in charge of deciding which URI the new resource should have. The client uses POST when the server is in charge of deciding which URI the new resource should have.</p>
+</blockquote>
+<dl style="padding-top:0px;color:rgb(51,51,51);font-family:Arial,Helvetica,FreeSans,sans-serif;line-height:17.328125px">
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">Another way of stating this rule is to say that PUT should be used when creating a new URI and POST when calling an existing URI. So, you use PUT to create (as well as update) resources when the client controls the URI that references the resource. For example, the client can create a new book that is referenced by an ISBN number that it assigns in this manner:</p>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">PUT http://{host:port}/library/v1/books/0201709066</pre>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">Notice that the client passed the ID 0201709066 (ISBN) by which this book will be referenced. This call creates a new book resource that can be accessed as shown in the GET method above. In this case, the PUT operation is appropriate because the client is responsible for specifying the URI that uniquely identifies the book. On the other hand, consider a service call where the client doesn't specify the URI:</p>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">POST http://{host:port}/library/v1/books/0201709066/reviews</pre>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">This call creates a review for the specified book. In a case like this, the server will return the URI by which the review can be referenced in the&nbsp;<code>Location</code>&nbsp;header of the HTTP response. The client can then retrieve the review using a URI created by the server. The GET call would look something like this:</p>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">GET http://{host:port}/library/v1/books/0201709066/reviews/1</pre>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">In this case, the new review resource is known as a&nbsp;<em>subordinate resource</em>. A subordinate resource is a resource that only exists in relation to some parent resource. In other words, a review cannot exist on its own without being attached to a book. POST is usually used for creating subordinate resources.</p>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">When updating a resource, it is important to keep in mind that PUT replaces the entire resource. In other words, if the PUT request shown above is called a second time with a different book representation, the entire book with ID 0201709066&nbsp;will be replaced with the new representation. In order to update just a portion of the resource using PUT (without overwriting the entire entity), you would need to define a subset of the resource that is known as a&nbsp;<em>shadow resource</em>. For example, if the book had a "checkedOut" shadow resource, we could use PUT to set this value by updating the resource at this URL:</p>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">PUT http://{host:port}/library/v1/books/0201709066/checkedOut</pre>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">This new checked-out resource would allow the client to use GET to determine if the book is checked out (without having to retrieve the entire book resource) or&nbsp;use PUT to update just the checked-out property of the book rather than the entire book resource (since it is replacing the entire checkedOut resource). The PATCH method described in&nbsp;<a href="http://tools.ietf.org/html/rfc5789" rel="nofollow" style="color:rgb(0,109,175);outline:none">RFC 5789</a>&nbsp;is another way to perform partial updates on a resource. It is an unsafe method (similar to POST) that allows the client to specify instructions regarding how a resource should be modified. Unfortunately, PATCH has not been widely adopted by the REST community and is not well supported by REST frameworks, tools, and documentation.</p>
+<blockquote style="font-style:italic;font-size:10pt;border-left-width:1px;border-left-style:solid;padding:0px 20px;margin:10px 20px;border-left-color:rgb(60,120,181)">
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:0px">Though PUT always replaces an entire resource, it is possible to use POST to replace only a portion of it. Though not generally recommended, some REST services support partial updates using an "overloaded POST" operation against a single resource (as opposed to a collection to which POST requests are normally directed). In this case, the body of the overloaded POST message would contain only the portion of the resource that should be modified. The service would be required to interpret the request body and update the resource appropriately. This approach is very similar to the solution proposed by the seldom used HTTP PATCH method.</p>
+</blockquote>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">Note that PUT is&nbsp;<em>idempotent</em>&nbsp;while POST is not. Idempotent means that the operation can be safely performed multiple times. Since subsequent PUT requests would simply replace the original resource with an identical representation, performing the same PUT operation multiple times does not change the server state after the first call (setting it to the same state with each call). On the other hand, POST is not idempotent because it creates a new resource with each call. Performing multiple identical POST operations would cause the server state to change with every execution (as a new resource is created each time).</p>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">Finally, the DELETE method is used to delete resources. Like PUT, DELETE operates on an entire resource and is idempotent. That is, the whole resource is deleted rather than just a part of it. A typical DELETE method call looks like this:</p>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">DELETE http://{host:port}/library/v1/books/0201709066</pre>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">After deleting a resource, it is no longer available. In this case, issuing a GET request to this resource would return an HTTP status code of 404 (Not Found).</p>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">The most basic pattern in REST API design is the use of plural resource names to represent collections and singular names or numeric IDs to represent individual resources. The following table illustrates how the standard HTTP methods manipulate both of these resource types:</p>
+<div style="overflow:auto">
+<table style="font-size:10pt;line-height:13pt;border:0px;margin-bottom:10px;padding:0px;clear:left;background-image:none;border-collapse:collapse">
+<tbody>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<th style="margin:0px;padding:5px 7px;vertical-align:top;font-size:10pt;line-height:13pt;color:rgb(0,0,0);border:1px solid rgb(221,221,221);min-width:0.6em;background-color:rgb(240,240,240)">Resource</th>
+<th style="margin:0px;padding:5px 7px;vertical-align:top;font-size:10pt;line-height:13pt;color:rgb(0,0,0);border:1px solid rgb(221,221,221);min-width:0.6em;background-color:rgb(240,240,240)">POST</th>
+<th style="margin:0px;padding:5px 7px;vertical-align:top;font-size:10pt;line-height:13pt;color:rgb(0,0,0);border:1px solid rgb(221,221,221);min-width:0.6em;background-color:rgb(240,240,240)">GET</th>
+<th style="margin:0px;padding:5px 7px;vertical-align:top;font-size:10pt;line-height:13pt;color:rgb(0,0,0);border:1px solid rgb(221,221,221);min-width:0.6em;background-color:rgb(240,240,240)">PUT</th>
+<th style="margin:0px;padding:5px 7px;vertical-align:top;font-size:10pt;line-height:13pt;color:rgb(0,0,0);border:1px solid rgb(221,221,221);min-width:0.6em;background-color:rgb(240,240,240)">DELETE</th>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><code style="margin-top:0px">/books</code></td>
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">Create a new book</td>
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">Get a list of books</td>
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">Update all books</td>
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">Delete all books</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><code style="margin-top:0px">/books/{ISBN}</code></td>
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">Undefined</td>
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">Get a book</td>
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">Update a book</td>
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">Delete a book</td>
+</tr>
+</tbody>
+</table>
+</div>
+<blockquote style="font-style:italic;font-size:10pt;border-left-width:1px;border-left-style:solid;padding:0px 20px;margin:10px 20px;border-left-color:rgb(60,120,181)">
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:0px">NOTE: In addition to GET, POST, PUT, and DELETE, The HTTP specification defines the OPTIONS, HEAD, TRACE, and CONNECT methods. The OPTIONS method is used to query which HTTP methods are supported by a particular resource (returned in the&nbsp;<code>Allow</code>&nbsp;header). The HEAD method returns the HTTP headers without any body (response meta-data only). The TRACE and CONNECT methods are not used.</p>
+</blockquote>
+<h3 style="line-height:normal;padding:0px;font-size:1.4em;margin:1.5em 0px 0.5em;color:rgb(0,0,0)">Resource URI</h3>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">The URIs by which resources are referenced are a central part of any REST API. One of the most fundamental REST principles is that URIs should represent nouns, not verbs. There are two good reasons for this. First, the actions that can be performed have already been defined by the HTTP protocol (GET, POST, PUT, DELETE). Since they are standard, these actions are well understood by REST clients. We should not define new actions by including verbs in the URI. Remember, REST services are designed to perform a small number of operations (i.e., HTTP methods) on a large number of resources. This makes any new API very easy to learn. Second, since HTTP requires the client to specify an action using a standard HTTP method in each call, it only makes sense that this action would be performed against a concrete resource (noun) as opposed to another action (verb). For example, consider the following URI:</p>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">GET http://{host:port}/library/v1/getBooks</pre>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">In REST parlance, this URI is saying "get the getBooks resource". This is redundant and a bit confusing. A better way to express this idea is through a URI like this:</p>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">GET http://{host:port}/library/v1/books</pre>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">This URI just says "get the books resource". The representation of the books resource would naturally be a list of books stored in the library.</p>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">Another common guideline is to use plural nouns for collections of items. For example, consider the following service calls:</p>
+<div style="overflow:auto">
+<table style="font-size:10pt;line-height:13pt;border:0px;margin-bottom:10px;padding:0px;clear:left;background-image:none;border-collapse:collapse">
+<tbody>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<th colspan="1" style="margin:0px;padding:5px 7px;vertical-align:top;font-size:10pt;line-height:13pt;color:rgb(0,0,0);border:1px solid rgb(221,221,221);min-width:0.6em;background-color:rgb(240,240,240)">HTTP Method</th>
+<th style="margin:0px;padding:5px 7px;vertical-align:top;font-size:10pt;line-height:13pt;color:rgb(0,0,0);border:1px solid rgb(221,221,221);min-width:0.6em;background-color:rgb(240,240,240)">URI</th>
+<th style="margin:0px;padding:5px 7px;vertical-align:top;font-size:10pt;line-height:13pt;color:rgb(0,0,0);border:1px solid rgb(221,221,221);min-width:0.6em;background-color:rgb(240,240,240)">Description</th>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><code style="margin-top:0px">GET</code></td>
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><code style="margin-top:0px">http://{host:port}/library/v1/books</code></td>
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">Get a representation of a list of books</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><code style="margin-top:0px">PUT</code></td>
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><code style="margin-top:0px">http://{host:port}/library/v1/books/0201709066</code></td>
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">Create a new book resource with ISBN&nbsp;<span style="margin-top:0px">0201709066</span></td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><code style="margin-top:0px">GET</code></td>
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><code style="margin-top:0px">http://{host:port}/library/v1/books/0201709066</code></td>
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">Get a representation of the book with ISBN&nbsp;<span style="margin-top:0px">0201709066</span></td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><code style="margin-top:0px">DELETE</code></td>
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><code style="margin-top:0px">http://{host:port}/library/v1/books/0201709066</code></td>
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">Delete the book resource with ISBN&nbsp;<span style="margin-top:0px">0201709066</span></td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><code style="margin-top:0px">POST</code></td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:0px;margin-top:0px"><code>http://{host:port}/library/v1/books/0201709066/reviews</code></p>
+</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">Create a new book review whose URI will be returned in the response</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">Notice how the second GET operation references an individual book in the books collection. This conveys the idea that we are retrieving a single book from the collection of all books.</p>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">The URIs for REST services will typically grow in a hierarchical fashion. For example, imagine that our library service allowed patrons to attach a review to each book. To accommodate this use case, the URI for this API should first reference the book to which the review applies and then specify the review itself in this manner:</p>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">GET http://{host:port}/library/v1/books/0201709066/reviews/1</pre>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">To get a list of all reviews pertaining to the book identified by ISBN&nbsp;0201709066, we would reference the collection of reviews using a URI like this:</p>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">GET http://{host:port}/library/v1/books/0201709066/reviews</pre>
+<blockquote style="font-style:italic;font-size:10pt;border-left-width:1px;border-left-style:solid;padding:0px 20px;margin:10px 20px;border-left-color:rgb(60,120,181)">
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">NOTE: There has been much discussion in the REST community regarding whether it is most proper to use of the term URI or URL. In most cases, this debate is not constructive and the two terms can be used interchangeably. Technically, a URL is just a specific type of URI. However, since the other URI types (URN and URC) are rarely used, URIs and URLs are almost always equivalent. URL is considered a more "classical" (i.e., historical) term while URI is more "contemporary" (see&nbsp;<a href="http://tools.ietf.org/html/rfc3305#section-2.1" rel="nofollow" style="color:rgb(0,109,175);outline:none">RFC 3305</a>). &nbsp;Further,<a href="http://tools.ietf.org/html/rfc3986#section-1.1.3" rel="nofollow" style="color:rgb(0,109,175);outline:none">RFC 3986</a>&nbsp;states the following:</p>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px"><code>Future specifications and related documentation should use the general term "URI", rather than the more restrictive terms URL and URN.</code></p>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:0px">Therefore, this document recommends that the term URL be deprecated in favor of URI.</p>
+</blockquote>
+<h3 style="line-height:normal;padding:0px;font-size:1.4em;margin:1.5em 0px 0.5em;color:rgb(0,0,0)">Request Headers and Body</h3>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">For each REST API method, the API designer must document which HTTP headers are required as well as the expected format of the request body (if applicable). The most common request headers used in REST service calls are&nbsp;<code>Content-Type</code>&nbsp;and&nbsp;<code>Accept</code>&nbsp;which are both used for content negotiation.&nbsp;<code>Content-Type</code>&nbsp;indicates the format of the request body. This header is required for HTTP methods that create or modify resources (i.e., POST and PUT) but is not applicable to GET and DELETE requests since they do not include a payload. The&nbsp;<code>Accept</code>header tells the server the response format desired by the client. For example, if the client wishes to receive resource representations in XML format, it would include an&nbsp;<code>Accept</code>&nbsp;header with a value of&nbsp;<code>application/xml</code>.</p>
+<blockquote style="font-style:italic;font-size:10pt;border-left-width:1px;border-left-style:solid;padding:0px 20px;margin:10px 20px;border-left-color:rgb(60,120,181)">
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:0px">NOTE: If the server doesn't support the format of the body's request or the desired response, a 415&nbsp;"Unsupported Media Type" error should be returned.</p>
+</blockquote>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">In addition to the HTTP headers, the expected format and content of the request body must be defined. This information specifies the format in which resource representations will be submitted to the server (e.g., JSON or XML) as well as the information contained in that representation (e.g., field names and values). In order to provide flexibility to the client, many REST services support multiple request formats such as JSON and XML. For example, here is a typical HTTP request that contains JSON formatted content in the body:</p>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">POST <span>http://rest.service.com/library/v1/books/0201709066/reviews</span> HTTP/1.1<br>Content-Type: application/json<br>Accept: application/json</pre>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">{"author":"John Doe", "comments":"Very informative."}</pre>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">The sample HTTP request above indicates that the client is creating a new review for book 0201709066&nbsp;by performing a POST to the reviews resource. The&nbsp;<code>Content-Typ</code>e header indicates that the request body is formatted in JSON and the&nbsp;<code>Accept</code>&nbsp;header conveys that the client wishes to receive the response in JSON format.&nbsp;Similarly, here is the same request in XML format:</p>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">POST <span>http://rest.service.com/library/v1/books/0201709066/reviews</span> HTTP/1.1<br>Content-Type: application/xml<br>Accept: application/xml</pre>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">&lt;resource&gt;<br>    &lt;author&gt;John Doe&lt;/author&gt;<br>    &lt;comments&gt;Very informative.&lt;/comments&gt;<br>&lt;/resource&gt;</pre>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">Though both the&nbsp;<code>Content-Type</code>&nbsp;and&nbsp;<code>Accept</code>&nbsp;headers are shown here, the&nbsp;<code>Accept</code>&nbsp;header is optional if its value is the same as&nbsp;<code>Content-Type</code>. In other words, the server should default to returning a response in the same format as the request. Of course, the&nbsp;<code>Accept</code>&nbsp;header should be included in all GET requests since a&nbsp;<code>Content-Type</code>&nbsp;header is not applicable in that case.</p>
+<h3 style="line-height:normal;padding:0px;font-size:1.4em;margin:1.5em 0px 0.5em;color:rgb(0,0,0)">Response Status Code and Body</h3>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">The response to a REST service call contains multiple items of interest to the client. First, a REST response always includes a status code that conveys the result of the requested operation. The available status codes are defined by the HTTP specification and are grouped into 5 ranges that each convey a general meaning. These five ranges are as follows:</p>
+<div style="overflow:auto">
+<table style="font-size:10pt;line-height:13pt;border:0px;margin-bottom:10px;padding:0px;clear:left;background-image:none;border-collapse:collapse">
+<tbody>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<th style="margin:0px;padding:5px 7px;vertical-align:top;font-size:10pt;line-height:13pt;color:rgb(0,0,0);border:1px solid rgb(221,221,221);min-width:0.6em;background-color:rgb(240,240,240)">Range</th>
+<th style="margin:0px;padding:5px 7px;vertical-align:top;font-size:10pt;line-height:13pt;color:rgb(0,0,0);border:1px solid rgb(221,221,221);min-width:0.6em;background-color:rgb(240,240,240)">Description</th>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">1xx (Meta)</td>
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">Used only in negotiations with HTTP server.</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">2xx (Successful)</td>
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">The operation was successful.</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">3xx (Redirection)</td>
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">The client must perform an additional operation to get what it wants.</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">4xx (Client-Side Error)</td>
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">There is a problem with the client's request.</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">5xx (Server-Side Error)</td>
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">An error occurred on the server that prevented it from servicing the request.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">Here are some of the most common response status codes (codes in bold are the most common):</p>
+<div style="overflow:auto">
+<table style="font-size:10pt;line-height:13pt;border:0px;margin-bottom:10px;padding:0px;clear:left;background-image:none;border-collapse:collapse">
+<tbody>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<th style="margin:0px;padding:5px 7px;vertical-align:top;font-size:10pt;line-height:13pt;color:rgb(0,0,0);border:1px solid rgb(221,221,221);min-width:0.6em;background-color:rgb(240,240,240)">Status Code</th>
+<th style="margin:0px;padding:5px 7px;vertical-align:top;font-size:10pt;line-height:13pt;color:rgb(0,0,0);border:1px solid rgb(221,221,221);min-width:0.6em;background-color:rgb(240,240,240)">Description</th>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><strong style="margin-top:0px">200 (OK)</strong></td>
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">The request was received and processed successfully.</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><strong style="margin-top:0px">201 (Created)</strong></td>
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">Indicates that a new server resource has been created (in response to a POST or PUT request). The URI pointing to the new resource would be returned in the&nbsp;<code style="margin-top:0px">Location</code>&nbsp;HTTP header.</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">202 (Accepted)</td>
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">The request was accepted and is being processed. Typically returned in response to long running asynchronous processes.</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">204 (No Content)</td>
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">The request was processed successfully but there is no content to return.</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">206 (Partial Content)</td>
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">The request was only partially satisfied. For example, the client may have requested all data covering a certain date range. If only a portion of the range is available, that portion may be returned in a 206 response.</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">300 (Multiple Choices)</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">There are multiple options available and it is required for the client to select between them. For example, if the service hasn't established a default response format, it could respond with a 300 message indicating that the response can be returned in JSON or XML and the client must re-issue the request indicating which format is desired (in the&nbsp;<code style="margin-top:0px">Accept</code>&nbsp;header).</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">301 (Moved Permanently)</td>
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">The URI for this service call has changed and all future calls should be made to the new location. Client should re-issue the same request to the new location. The new URI would be returned in the&nbsp;<code style="margin-top:0px">Location</code>&nbsp;header.</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><strong style="margin-top:0px">304 (Not Modified)</strong></td>
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">The resource hasn’t changed since it was last requested (based on the request's&nbsp;<code style="margin-top:0px">If-Modified-Since</code>&nbsp;header or the value of an ETag in the&nbsp;<code>If-None-Matches</code>&nbsp;header) so the response will contain no body.</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">307 (Temporary Redirect)</td>
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">The requested resource has temporarily moved to the URI specified in the&nbsp;<code style="margin-top:0px">Location</code>&nbsp;header but future calls should be made to the original location.</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><strong style="margin-top:0px">400 (Bad Request)</strong></td>
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">The client's request was not properly formatted, was missing required information, or contained invalid information.</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><strong style="margin-top:0px">401 (Unauthorized)</strong></td>
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">The client attempted to access a resource without providing the required credentials (authentication error).</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><strong style="margin-top:0px">403 (Forbidden)</strong></td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">The client is authenticated but not allowed to perform the requested action (authorization error).</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><strong style="margin-top:0px">404 (Not Found)</strong></td>
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">The requested resource does not exist.</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">405 (Method Not Allowed)</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">The given HTTP method (GET, POST, PUT, DELETE, etc.) is not supported for the specified resource. The response should include an&nbsp;<code style="margin-top:0px">Allow</code>&nbsp;header indicating the methods supported by that resource.</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">406 (Not Acceptable)</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">The server does not support any of the formats specified by the request's&nbsp;<code style="margin-top:0px">Accept</code>&nbsp;header.</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">409 (Conflict)</td>
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">Fulfilling the request would put the server into an invalid state.</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">410 (Gone)</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">Indicates that the requested resource has been removed from service.</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">412 (Precondition Failed)</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">The server wasn’t able to satisfy a precondition set by the client. For example, the body of a request indicates that account XYZ should be deleted if not active for the past 30 days. If the account is active, this code may be returned to indicate to the client that the account was not deleted because it is active.</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">415 (Unsupported Media Type)</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">The server does not support the format of the request body as specified in the request's&nbsp;<code style="margin-top:0px">Content-Type</code>&nbsp;header.</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">422 (Unprocessable Entity)</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">The request was well-formed but was unable to be followed due to semantic errors. This error differs from a 403 in that this error involves the relationship between 2 or more fields rather than just a single field. A multi-field relationship may dictate that if one field has a value then the other field is required. For example, consider a resource that contains first name, last name, and company name. First name and last name may be optional as long as both are empty. However, if one is specified then the other becomes required.</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><strong style="margin-top:0px">500 (Internal Server Error)</strong></td>
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">An error occurred on the server when attempting to satisfy the request.</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><b>503 (Service Unavailable)</b></td>
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">The request cannot be satisfied because a dependency on the server-side is unavailable. For example, the database went down or the authorization server is unavailable.</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><span style="margin-top:0px;color:rgb(255,255,255)">..............................................</span></td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">In addition to the status code, responses that include a message body should also contain a&nbsp;<code>Content-Type</code>&nbsp;header. This header indicates the format of content contained in the body of the response (e.g., JSON, XML, image, etc.). To illustrate, here is a typical HTTP response (to a GET request) that uses the&nbsp;<code>Content-Type</code>&nbsp;header to indicate that the body of the response is in JSON format:</p>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">HTTP/1.1 200 OK<br>Date: Wed, 5 Sep 2012 06:25:24 GMT<br>Content-Type: application/json</pre>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">{"isbn":"1146104553", "author":"Leo Tolstoy", "title":"War and Peace"}</pre>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">In response to a GET request, the server returns a representation of the requested resource. Similar to the request body, the format and content of this representation is service-specific. The service consumer must refer to documentation provided by the service provider to determine how the body of the response should be interpreted.</p>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">Some REST service calls may not return anything in the body of the response. For example, in response to a POST request that creates a new resource, the service will typically just respond with a message indicating that the resource was created and the location of the new resource in a header as illustrated here:</p>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">HTTP/1.1 201 Created<br>Date: Thu, 5 Jun 2008 06:25:24 GMT<br>Location: http://rest.service.com/library/v1/books/1146104553</pre>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">The response above indicates that a new book resource was successfully created and is available at the URI indicated by the&nbsp;<code>Location</code>&nbsp;header.</p>
+<h2 style="line-height:normal;padding:0px 0px 2px;font-size:1.6em;margin:2em 0px 0.5em;color:rgb(0,0,0);border-bottom-color:rgb(145,150,153);border-bottom-width:1px;border-bottom-style:solid">Resource Modeling</h2>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">Resource modeling is the process of identifying resources and their relationships to each other. Each URI in a resource model should convey the resource hierarchy. For example, the forward slashes in the following URI are used to establish a hierarchical relationship between the specified resources:</p>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">http://api.nfl.com/v1/divisions/nfcWest/teams/arizona/players/11</pre>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">This URI uniquely identifies player number 11 on the Arizona Cardinals team within in the NFC West division of the NFL. Given this URI, the following URIs should also represent addressable resources:</p>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">http://api.nfl.com/v1/divisions/nfcWest/teams/arizona/players</pre>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">http://api.nfl.com/v1/divisions/nfcWest/teams/arizona</pre>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">http://api.nfl.com/v1/divisions/nfcWest/teams</pre>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">http://api.nfl.com/v1/divisions/nfcWest</pre>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">http://api.nfl.com/v1/divisions</pre>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">REST incorporates four useful patterns that should be applied when designing a resource model. The URIs above are modeled after REST's document (11, arizona, nfcWest), collection (players), and store (teams, divisions) patterns. The next section describes these patterns.</p>
+<h2 style="line-height:normal;padding:0px 0px 2px;font-size:1.6em;margin:2em 0px 0.5em;color:rgb(0,0,0);border-bottom-color:rgb(145,150,153);border-bottom-width:1px;border-bottom-style:solid">Resource Patterns</h2>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">Resources exposed by a REST API should be modeled after one of the following resource patterns:</p>
+<ul style="margin:1em 0px;padding-left:3em;font-size:10pt;line-height:13pt;padding-top:0px"><li style="font-size:10pt;line-height:13pt;margin:0px;padding:0px">Document</li>
+<li style="font-size:10pt;line-height:13pt;margin:0px;padding:0px">Collection</li>
+<li style="font-size:10pt;line-height:13pt;margin:0px;padding:0px">Store</li>
+<li style="font-size:10pt;line-height:13pt;margin:0px;padding:0px">Controller</li></ul>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">Each of these patterns, along with the non-RESTful RPC over HTTP service style, are described below.</p>
+<h3 style="line-height:normal;padding:0px;font-size:1.4em;margin:1.5em 0px 0.5em;color:rgb(0,0,0)">Document</h3>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">Document (a.k.a., entity) is the most basic pattern in a REST API. In essence, a document represents a single resource on the server (e.g., a file or a database record). The following URIs represent document resources:</p>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">http://rest.service.com/library/v1/books/0201709066</pre>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">http://rest.service.com/library/v1/books/0201709066/reviews/1</pre>
+<h3 style="line-height:normal;padding:0px;font-size:1.4em;margin:1.5em 0px 0.5em;color:rgb(0,0,0)">Collection</h3>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">The collection (a.k.a., list) pattern represents a group of document resources. The server may return a representation of the collection when presented with an HTTP GET request or add to the collection in response to an HTTP POST. The URI by which each resource can be addressed is assigned by the server and returned in the HTTP&nbsp;<code>Location</code>&nbsp;header. The following URI is an example of a collection resource:</p>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">http://rest.service.com/library/v1/books/0201709066/reviews</pre>
+<h3 style="line-height:normal;padding:0px;font-size:1.4em;margin:1.5em 0px 0.5em;color:rgb(0,0,0)">Store</h3>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">The store pattern exposes a resource that serves as a repository where clients can store, retrieve, and delete resources. Unlike collections, the client assigns the URI for each new resource inserted into the store. The following URI is an example of a store:</p>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">http://rest.service.com/library/v1/books</pre>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">Though this resource looks like a collection, it does not support the POST method. Instead, clients add books by performing a PUT against the store and including the book's ISBN number in the URI (thus creating a new document resource URI). The following PUT&nbsp;operation inserts or updates a resource and the DELETE action removes it from the store.</p>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">PUT http://rest.service.com/library/v1/books/0201709066</pre>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">DELETE http://rest.service.com/library/v1/books/0201709066</pre>
+<h3 style="line-height:normal;padding:0px;font-size:1.4em;margin:1.5em 0px 0.5em;color:rgb(0,0,0)">Controller</h3>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">Though not RESTful in the strictest sense, the controller pattern may sometimes offer the most intuitive solution to an API design dilemma. A controller is similar to a remote procedure call (RPC) because it attaches a new verb to an existing resource. Controller resources can be used to perform procedural operations that don't logically map to an HTTP method. Since they don't fit into the standard HTTP interface (using HTTP methods), controller resources should always be invoked using a POST request. Given that POST is semantically ambiguous, it is the only HTTP method that can be "overloaded" under certain circumstances to perform "non-CRUD" operations. The controller action (named "resend" in the following example) should be listed in query string using the "operation" name like this:</p>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">POST&nbsp;http://rest.service.com/library/v1/books/0201709066/overdueAlerts/1?operation=resend</pre>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">Another way to implement the controller pattern is to list the action last in the URI path like this (not recommended):</p>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">POST&nbsp;http://rest.service.com/library/v1/books/0201709066/overdueAlerts/1/resend</pre>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">From the URIs above, it is clear that an "overdue alert" with ID of "1" was previously added to a book resource's overdueAlerts collection. Using the controller pattern, the client is able to resend the same alert without having to create a new server-side resource.</p>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">The controller pattern is very similar to the "POX" style service (plain old XML over HTTP) except that it offers a little more structure. For example, a POX style service may create a generic service endpoint that is invoked like this:</p>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">POST http://rest.service.com/library/v1/BookService<br>Content-Type: application/xml</pre>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">&lt;resource&gt;<br>    &lt;isbn&gt;0201709066&lt;/isbn&gt;<br>    &lt;overdueAlertId&gt;1&lt;/overdueAlertId&gt;<br>    &lt;action&gt;resend&lt;/action&gt;<br>&lt;/resource&gt;</pre>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">Since the functions performed by a POX service are not prescribed in the URI, it's possible that the BookService endpoint shown above could perform any book-related operation based on the message body. The controller pattern offers more structure by including the action in the URI (i.e., query string) and tying the custom operation more closely to the resource upon which it is acting. Notice how the controller pattern above allows the client to resend an overdue book alert without any message body at all. Additionally, controller resources maintain separate and distinct URIs for each action that doesn't logically map to a CRUD operation.</p>
+<h3 style="line-height:normal;padding:0px;font-size:1.4em;margin:1.5em 0px 0.5em;color:rgb(0,0,0)">RPC over HTTP</h3>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">Remote procedure call (RPC) over HTTP style services can be useful when performing actions or retrieving dynamically calculated values that are unrelated to persisted resources. This type of service is essentially the same as the POX (plain old XML over HTTP) style except that it isn't specific to XML (JSON payloads are also supported). Like the controller pattern, RPC and POX services violate some REST principles but, at times, may provide the most pragmatic solution. If an operation doesn't logically map to an HTTP verb and it can't naturally be associated with an existing resource, an RPC style API may be required. This service style serves as a sort of "catch-all" for any action that doesn't fit neatly into REST's resource-oriented HTTP view of the world. For example, consider a banking service that performs currency conversion. If a "currency" resource exists in the system then it may make sense to attach a new "convert" operation to the resource using the controller pattern like this:</p>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">POST http://api.bank.com/v1/currencies/euro/convert?to=dollars&amp;amount=150</pre>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">However, if currency is not a resource then it may be necessary to employ an RPC/POX style solution by defining a new "convertCurrency" action on the service root as shown here:</p>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">POST http://api.bank.com/v1/convertCurrency?from=euro&amp;to=dollars&amp;amount=150</pre>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">Though we can add new verbs to the service root as shown above, some companies' standards mandate that a service endpoint be established for this type of RPC call and convention dictates that these endpoints use a "Service" suffix such as "CurrencyService" or "BankingService". Therefore, the recommended URI for a currency conversion service would look something like this:</p>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">POST http://api.bank.com/v1/BankingService?action=convertCurrency&amp;from=euro&amp;to=dollars&amp;amount=150</pre>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">Or, better yet, by specifying a more specific endpoint and including the verb in the URI, an RPC/controller hybrid can be created like this:</p>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">POST http://api.bank.com/v1/CurrencyService/convert?from=euro&amp;to=dollars&amp;amount=150</pre>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">In this manner, a unique URI is defined for each RPC function. This hybrid approach is preferred since it is more consistent with the controller pattern.</p>
+<h2 style="line-height:normal;padding:0px 0px 2px;font-size:1.6em;margin:2em 0px 0.5em;color:rgb(0,0,0);border-bottom-color:rgb(145,150,153);border-bottom-width:1px;border-bottom-style:solid">REST API Guidelines</h2>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">This section provides some basic guidelines to keep in mind and/or apply while designing and implementing REST services.</p>
+<h3 style="line-height:normal;padding:0px;font-size:1.4em;margin:1.5em 0px 0.5em;color:rgb(0,0,0)">Designing with Nouns</h3>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">Given that REST services are based on manipulating resources using standard HTTP methods, the REST service designer is required to think differently than when designing a remote procedure call (RPC) service. For example, consider that we have two resources named Customer and Magazine. In a traditional RPC service, we might call the "subscribe" method in order to subscribe a customer to a magazine. The client could invoke the service like this:</p>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">POST http://rpc.service.com/MagazineService/subscribe?customer=1234&amp;magazineId=528233</pre>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">Since HTTP does not define a subscribe action, this approach is not RESTful. Therefore, instead of calling a subscribe method, the REST service designer could create a new "subscription" resource that represents the link between a customer and a magazine. The client could then subscribe a customer to a magazine using a POST call that looks like this:</p>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">POST http://rest.service.com/customers/1234/subscriptions?magazineId=528233</pre>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">Or a PUT like this (if the client dictates the ID in the URI):</p>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">PUT http://rest.service.com/customers/1234/subscriptions/528233</pre>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">Notice how the RESTful approach removes the non-standard verb from the API call and replaces it with a resource that can be created using a standard HTTP method. Furthermore, this approach eliminates the need for an "unsubscribe" method since the subscription can be removed using a standard HTTP DELETE action against the new subscription resource. In a similar manner, if a user is required to login before accessing a REST resource, a standard HTTP POST could be used to create a "session" resource on the server rather than calling a procedural "login" method. When the user logs out, the client could use the HTTP DELETE method to remove the associated session resource or the PUT method to change its state to invalid.</p>
+<h3 style="line-height:normal;padding:0px;font-size:1.4em;margin:1.5em 0px 0.5em;color:rgb(0,0,0)">Managing State through Links</h3>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">In an earlier section, we discussed that one of the principles of REST is that responses should contain links to resources the client can call next. Providing the next URIs in response to previous requests is how a "connected" REST service is created. It allows clients to discover the resources and operations that are available as they exercise the service. This why REST stands for "Representational State Transfer". You can think of a properly designed REST service as a state machine. A resource starts in a given state (i.e., it has a specific representation). Clients can modify resource state by making calls to the REST service. After each state transition, the service indicates the next available states allowing for an orderly flow from one state to the next. The REST community commonly refers to this concept using the acronym&nbsp;<em>HATEOAS</em>&nbsp;which stands for "hypermedia as the engine of appliction state". To illustrate, consider the following request that retrieves a list of books:</p>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px"><code>GET http://rest.service.com/library/v2/books</code></p>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">The response to this request should include links to the referenced resources like this in XML:</p>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">&lt;books href="<span>/library/v1/books</span>"&gt;<br>    &lt;book href="<span>/library/v1/books/0201709066</span>"&gt;<br>        &lt;author&gt;Leo Tolstoy&lt;/author&gt;<br>        &lt;title&gt;War and Peace&lt;/title&gt;<br>    &lt;/book&gt;<br>    &lt;book href="<span>/library/v1/books/0486406512</span>"&gt;<br>        &lt;author&gt;Charles Dickens&lt;/author&gt;<br>        &lt;title&gt;A Tale of Two Cities&lt;/title&gt;<br>    &lt;/book&gt;<br>    &lt;book href="<span>/library/v1/books/161382310X</span>"&gt;<br>        &lt;author&gt;Herman Melville&lt;/author&gt;<br>        &lt;title&gt;Moby Dick&lt;/title&gt;<br>    &lt;/book&gt;<br>&lt;/books&gt;</pre>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">And like this in JSON:</p>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px"><code>{"books": {"href":"/library/v1/books", ["book": {"href":"/library/v1/books/0201709066", "author":"Leo Tolstoy", "title":"War and Peace"}, "book": {"href":"/library/v1/books/0486406512", "author":"Charles Dickens", "title":"A Tale of Two Cities"}, "book": {"href":"/library/v1/books/161382310X", "author":"Herman Melville", "title":"Moby Dick"}]}}</code></p>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">Providing links dynamically as the client traverses a REST API is a powerful concept that makes it possible for REST clients to be constructed in an automated fashion without prior knowledge of every resource and operation exposed by the service.</p>
+<h3 style="line-height:normal;padding:0px;font-size:1.4em;margin:1.5em 0px 0.5em;color:rgb(0,0,0)">Documenting a REST API</h3>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">There are numerous styles and formats for documenting REST services. In SPI, it is recommended that REST APIs be documented using a format similar to the following:</p>
+<h4 style="line-height:normal;padding:0px;font-size:1.2em;margin:1.2em 0px 0.3em;color:rgb(0,0,0)"><span>Create Book Review</span></h4>
+<div style="overflow:auto">
+<table style="font-size:10pt;line-height:13pt;border:0px;margin-bottom:10px;padding:0px;clear:left;background-image:none;border-collapse:collapse">
+<tbody>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><strong style="margin-top:0px">Description</strong></td>
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">Adds a new book review.</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><strong style="margin-top:0px">Version</strong></td>
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">2</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><strong style="margin-top:0px">HTTP Method</strong></td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">POST</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:0px;margin-top:0px"><strong>URI</strong></p>
+</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:0px;margin-top:0px"><code>http://{host:port}/library/v2/books/{ISBN}/reviews</code></p>
+</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><strong style="margin-top:0px">Request Headers</strong></td>
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px;margin-top:0px">HTTP header names and values:</p>
+<div style="overflow:auto">
+<table style="font-size:10pt;line-height:13pt;border:0px;margin-bottom:10px;padding:0px;clear:left;background-image:none;border-collapse:collapse">
+<tbody>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<th style="margin:0px;padding:5px 7px;vertical-align:top;font-size:10pt;line-height:13pt;color:rgb(0,0,0);border:1px solid rgb(221,221,221);min-width:0.6em;background-color:rgb(240,240,240)">Name</th>
+<th style="margin:0px;padding:5px 7px;vertical-align:top;font-size:10pt;line-height:13pt;color:rgb(0,0,0);border:1px solid rgb(221,221,221);min-width:0.6em;background-color:rgb(240,240,240)">Value</th>
+<th colspan="1" style="margin:0px;padding:5px 7px;vertical-align:top;font-size:10pt;line-height:13pt;color:rgb(0,0,0);border:1px solid rgb(221,221,221);min-width:0.6em;background-color:rgb(240,240,240)">Type</th>
+<th colspan="1" style="margin:0px;padding:5px 7px;vertical-align:top;font-size:10pt;line-height:13pt;color:rgb(0,0,0);border:1px solid rgb(221,221,221);min-width:0.6em;background-color:rgb(240,240,240)">Required</th>
+<th colspan="1" style="margin:0px;padding:5px 7px;vertical-align:top;font-size:10pt;line-height:13pt;color:rgb(0,0,0);border:1px solid rgb(221,221,221);min-width:0.6em;background-color:rgb(240,240,240)">Default</th>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:0px;margin-top:0px"><code>Authorization</code></p>
+</td>
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">OAuth credentials</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">string</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">yes</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">&nbsp;</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:0px;margin-top:0px"><code>Content-Type</code></p>
+</td>
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px;margin-top:0px">Format of request body. Valid values are:</p>
+<ul style="margin:1em 0px;padding-left:1em;font-size:10pt;line-height:13pt;padding-top:0px"><li style="font-size:10pt;line-height:13pt;margin:0px;padding:0px">application/json</li>
+<li style="font-size:10pt;line-height:13pt;margin:0px;padding:0px">application/xml</li></ul>
+</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">enum</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">yes</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">&nbsp;</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><code style="margin-top:0px">Accept</code></td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px;margin-top:0px">Desired format of the response body. Valid values are:</p>
+<ul style="margin:1em 0px;padding-left:1em;font-size:10pt;line-height:13pt;padding-top:0px"><li style="font-size:10pt;line-height:13pt;margin:0px;padding:0px">application/json</li>
+<li style="font-size:10pt;line-height:13pt;margin:0px;padding:0px">application/xml</li></ul>
+</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">enum</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">no</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">value of&nbsp;<code style="margin-top:0px">Content-Type</code>&nbsp;header</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:0px;margin-top:0px"><br>
+</p>
+</td>
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><br>
+</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><br>
+</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><br>
+</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><br>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><strong style="margin-top:0px">Request Body</strong></td>
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px;margin-top:0px">JSON or XML formatted string containing the following property names and values (XML root element "resource"):</p>
+<div style="overflow:auto">
+<table style="font-size:10pt;line-height:13pt;border:0px;margin-bottom:10px;padding:0px;clear:left;background-image:none;border-collapse:collapse">
+<tbody>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<th style="margin:0px;padding:5px 7px;vertical-align:top;font-size:10pt;line-height:13pt;color:rgb(0,0,0);border:1px solid rgb(221,221,221);min-width:0.6em;background-color:rgb(240,240,240)">Name</th>
+<th style="margin:0px;padding:5px 7px;vertical-align:top;font-size:10pt;line-height:13pt;color:rgb(0,0,0);border:1px solid rgb(221,221,221);min-width:0.6em;background-color:rgb(240,240,240)">Value</th>
+<th style="margin:0px;padding:5px 7px;vertical-align:top;font-size:10pt;line-height:13pt;color:rgb(0,0,0);border:1px solid rgb(221,221,221);min-width:0.6em;background-color:rgb(240,240,240)">Type</th>
+<th colspan="1" style="margin:0px;padding:5px 7px;vertical-align:top;font-size:10pt;line-height:13pt;color:rgb(0,0,0);border:1px solid rgb(221,221,221);min-width:0.6em;background-color:rgb(240,240,240)">Max</th>
+<th colspan="1" style="margin:0px;padding:5px 7px;vertical-align:top;font-size:10pt;line-height:13pt;color:rgb(0,0,0);border:1px solid rgb(221,221,221);min-width:0.6em;background-color:rgb(240,240,240)">Required</th>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">
+<pre style="padding:0px;margin-top:0px;margin-bottom:10px;overflow:visible">review</pre>
+</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">Book review</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">object</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">&nbsp;</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">yes</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">
+<pre style="padding:0px;margin-top:0px;margin-bottom:10px;overflow:visible">    author</pre>
+</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">Author of review</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">string</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">100</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">yes</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">
+<pre style="padding:0px;margin-top:0px;margin-bottom:10px;overflow:visible">    comments</pre>
+</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">Review body</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">string</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">255</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">yes</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">
+<pre style="padding:0px;margin-top:0px;margin-bottom:10px;overflow:visible">    rating</pre>
+</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">Author's rating (1 to 5)</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">integer</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">5</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">yes</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">
+<pre style="padding:0px;margin-top:0px;margin-bottom:10px;overflow:visible">desiredPayment</pre>
+</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">Desired payment in exchange for review</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">decimal</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">100.00</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">no</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">
+<pre style="padding:0px;margin-top:0px;margin-bottom:10px;overflow:visible">bookCategory</pre>
+</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px;margin-top:0px">Book category. Valid values include:</p>
+<ul style="margin:1em 0px;padding-left:1em;font-size:10pt;line-height:13pt;padding-top:0px"><li style="font-size:10pt;line-height:13pt;margin:0px;padding:0px">fiction</li>
+<li style="font-size:10pt;line-height:13pt;margin:0px;padding:0px">nonFiction</li>
+<li style="font-size:10pt;line-height:13pt;margin:0px;padding:0px">scienceFiction</li></ul>
+</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">enum</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">&nbsp;</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">no</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">
+<pre style="padding:0px;margin-top:0px;margin-bottom:10px;overflow:visible">tags</pre>
+</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">Tags for this review</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">array</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">&nbsp;</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">no</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">
+<pre style="padding:0px;margin-top:0px;margin-bottom:10px;overflow:visible">    tag</pre>
+</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">Tag that conveys categorical information</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">object</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">&nbsp;</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">yes</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">
+<pre style="padding:0px;margin-top:0px;margin-bottom:10px;overflow:visible">        category</pre>
+</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">Category</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">string</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">50</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">yes</td>
+</tr>
+</tbody>
+</table>
+</div>
+</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><strong style="margin-top:0px">Response Headers</strong></td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px;margin-top:0px">HTTP header names and values:</p>
+<div style="overflow:auto">
+<table style="font-size:10pt;line-height:13pt;border:0px;margin-bottom:10px;padding:0px;clear:left;background-image:none;border-collapse:collapse">
+<tbody>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<th style="margin:0px;padding:5px 7px;vertical-align:top;font-size:10pt;line-height:13pt;color:rgb(0,0,0);border:1px solid rgb(221,221,221);min-width:0.6em;background-color:rgb(240,240,240)">Name</th>
+<th style="margin:0px;padding:5px 7px;vertical-align:top;font-size:10pt;line-height:13pt;color:rgb(0,0,0);border:1px solid rgb(221,221,221);min-width:0.6em;background-color:rgb(240,240,240)">Value</th>
+<th colspan="1" style="margin:0px;padding:5px 7px;vertical-align:top;font-size:10pt;line-height:13pt;color:rgb(0,0,0);border:1px solid rgb(221,221,221);min-width:0.6em;background-color:rgb(240,240,240)">Type</th>
+<th colspan="1" style="margin:0px;padding:5px 7px;vertical-align:top;font-size:10pt;line-height:13pt;color:rgb(0,0,0);border:1px solid rgb(221,221,221);min-width:0.6em;background-color:rgb(240,240,240)">Required</th>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:0px;margin-top:0px"><code>Content-Type</code></p>
+</td>
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px;margin-top:0px">Format of response body. Valid values are:</p>
+<ul style="margin:1em 0px;padding-left:1em;font-size:10pt;line-height:13pt;padding-top:0px"><li style="font-size:10pt;line-height:13pt;margin:0px;padding:0px">application/json</li>
+<li style="font-size:10pt;line-height:13pt;margin:0px;padding:0px">application/xml</li></ul>
+</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">enum</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">yes</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><code style="margin-top:0px">Location</code></td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">URI for the new book review resource</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">string</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">yes</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:0px;margin-top:0px"><br>
+</p>
+</td>
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><br>
+</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><br>
+</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><br>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><strong style="margin-top:0px">Response Body</strong></td>
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px;margin-top:0px">JSON or XML formatted string containing the following property names and values (XML root element "resource"):</p>
+<div style="overflow:auto">
+<table style="font-size:10pt;line-height:13pt;border:0px;margin-bottom:10px;padding:0px;clear:left;background-image:none;border-collapse:collapse">
+<tbody>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<th style="margin:0px;padding:5px 7px;vertical-align:top;font-size:10pt;line-height:13pt;color:rgb(0,0,0);border:1px solid rgb(221,221,221);min-width:0.6em;background-color:rgb(240,240,240)">Name</th>
+<th style="margin:0px;padding:5px 7px;vertical-align:top;font-size:10pt;line-height:13pt;color:rgb(0,0,0);border:1px solid rgb(221,221,221);min-width:0.6em;background-color:rgb(240,240,240)">Value</th>
+<th style="margin:0px;padding:5px 7px;vertical-align:top;font-size:10pt;line-height:13pt;color:rgb(0,0,0);border:1px solid rgb(221,221,221);min-width:0.6em;background-color:rgb(240,240,240)">Type</th>
+<th style="margin:0px;padding:5px 7px;vertical-align:top;font-size:10pt;line-height:13pt;color:rgb(0,0,0);border:1px solid rgb(221,221,221);min-width:0.6em;background-color:rgb(240,240,240)">Required</th>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">
+<pre style="padding:0px;margin-top:0px;margin-bottom:10px;overflow:visible">links</pre>
+</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">Links list</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">array</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">if successful</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">
+<pre style="padding:0px;margin-top:0px;margin-bottom:10px;overflow:visible">    link</pre>
+</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">Create a new resource</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">object</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">yes</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">
+<pre style="padding:0px;margin-top:0px;margin-bottom:10px;overflow:visible">        rel</pre>
+</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><code style="margin-top:0px">create-book-review</code></td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">string</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">yes</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">
+<pre style="padding:0px;margin-top:0px;margin-bottom:10px;overflow:visible">        href</pre>
+</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><code style="margin-top:0px">/books/{ISBN}/reviews</code></td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">string</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">yes</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">
+<pre style="padding:0px;margin-top:0px;margin-bottom:10px;overflow:visible">        method</pre>
+</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:0px;margin-top:0px"><span style="font-family:monospace">POST</span></p>
+</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">string</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">yes</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">
+<pre style="padding:0px;margin-top:0px;margin-bottom:10px;overflow:visible">    link</pre>
+</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">View this resource</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">object</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">yes</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">
+<pre style="padding:0px;margin-top:0px;margin-bottom:10px;overflow:visible">        rel</pre>
+</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><code style="margin-top:0px">view-book-review</code></td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">string</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">yes</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">
+<pre style="padding:0px;margin-top:0px;margin-bottom:10px;overflow:visible">        href</pre>
+</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><code style="margin-top:0px">/books/{ISBN}/reviews/{id}</code></td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">string</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">yes</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">
+<pre style="padding:0px;margin-top:0px;margin-bottom:10px;overflow:visible">        method</pre>
+</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><code style="margin-top:0px">GET</code></td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">string</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">yes</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">
+<pre style="padding:0px;margin-top:0px;margin-bottom:10px;overflow:visible">    link</pre>
+</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">Update this resource</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">object</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">yes</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">
+<pre style="padding:0px;margin-top:0px;margin-bottom:10px;overflow:visible">        rel</pre>
+</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><code style="margin-top:0px">update-book-review</code></td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">string</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">yes</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">
+<pre style="padding:0px;margin-top:0px;margin-bottom:10px;overflow:visible">        href</pre>
+</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><code style="margin-top:0px">/books/{ISBN}/reviews/{id}</code></td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">string</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">yes</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">
+<pre style="padding:0px;margin-top:0px;margin-bottom:10px;overflow:visible">        method</pre>
+</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><code style="margin-top:0px">PUT</code></td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">string</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">yes</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">
+<pre style="padding:0px;margin-top:0px;margin-bottom:10px;overflow:visible">    link</pre>
+</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">Delete this resource</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">object</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">yes</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">
+<pre style="padding:0px;margin-top:0px;margin-bottom:10px;overflow:visible">        rel</pre>
+</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><code style="margin-top:0px">delete-book-review</code></td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">string</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">yes</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">
+<pre style="padding:0px;margin-top:0px;margin-bottom:10px;overflow:visible">        href</pre>
+</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><code style="margin-top:0px">/books/{ISBN}/reviews/{id}</code></td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">string</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">yes</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">
+<pre style="padding:0px;margin-top:0px;margin-bottom:10px;overflow:visible">        method</pre>
+</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><code style="margin-top:0px">DELETE</code></td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">string</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">yes</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">
+<pre style="padding:0px;margin-top:0px;margin-bottom:10px;overflow:visible">    link</pre>
+</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">View API docs</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">object</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">no</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">
+<pre style="padding:0px;margin-top:0px;margin-bottom:10px;overflow:visible">        rel</pre>
+</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><code style="margin-top:0px">create-book-review-docs</code></td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">string</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">yes</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">
+<pre style="padding:0px;margin-top:0px;margin-bottom:10px;overflow:visible">        href</pre>
+</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">Absolute URI to HTML documentation for this API</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">string</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">yes</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">
+<pre style="padding:0px;margin-top:0px;margin-bottom:10px;overflow:visible">        method</pre>
+</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><code style="margin-top:0px">GET</code></td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">string</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">yes</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">
+<pre style="padding:0px;margin-top:0px;margin-bottom:10px;overflow:visible">errors</pre>
+</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">Collection of errors</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">array</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">if error</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">
+<pre style="padding:0px;margin-top:0px;margin-bottom:10px;overflow:visible">    error</pre>
+</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">Error information</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">object</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">yes</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">
+<pre style="padding:0px;margin-top:0px;margin-bottom:10px;overflow:visible">        code</pre>
+</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">Error code</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">string</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">yes</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">
+<pre style="padding:0px;margin-top:0px;margin-bottom:10px;overflow:visible">        description</pre>
+</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">Error description</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">string</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">no</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">
+<pre style="padding:0px;margin-top:0px;margin-bottom:10px;overflow:visible">        fieldName</pre>
+</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">Field name</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">string</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">no</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">
+<pre style="padding:0px;margin-top:0px;margin-bottom:10px;overflow:visible">        fieldValue</pre>
+</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">Field value</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">string</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">no</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">
+<pre style="padding:0px;margin-top:0px;margin-bottom:10px;overflow:visible">        moreInfo</pre>
+</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">URI providing more info about the error in HTML format</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">string</td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">no</td>
+</tr>
+</tbody>
+</table>
+</div>
+</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><strong style="margin-top:0px">Response Codes</strong></td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px;margin-top:0px">HTTP status codes returned in the header:</p>
+<div style="overflow:auto">
+<table style="font-size:10pt;line-height:13pt;border:0px;margin-bottom:10px;padding:0px;clear:left;background-image:none;border-collapse:collapse">
+<tbody>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<th style="margin:0px;padding:5px 7px;vertical-align:top;font-size:10pt;line-height:13pt;color:rgb(0,0,0);border:1px solid rgb(221,221,221);min-width:0.6em;background-color:rgb(240,240,240)">HTTP Code</th>
+<th style="margin:0px;padding:5px 7px;vertical-align:top;font-size:10pt;line-height:13pt;color:rgb(0,0,0);border:1px solid rgb(221,221,221);min-width:0.6em;background-color:rgb(240,240,240)">Description</th>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><code style="margin-top:0px">201</code></td>
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">Review was successfully created.</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><code style="margin-top:0px">400</code></td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">Bad request.&nbsp;<span style="margin-top:0px;color:rgb(0,0,0)">Most likely caused by a missing or invalid parameter.</span></td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><code style="margin-top:0px">401</code></td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">Not authenticated.</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><code style="margin-top:0px">403</code></td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">Not authorized.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><strong style="margin-top:0px">Error Codes</strong></td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px;margin-top:0px">Error codes returned in the body:</p>
+<div style="overflow:auto">
+<table style="font-size:10pt;line-height:13pt;border:0px;margin-bottom:10px;padding:0px;clear:left;background-image:none;border-collapse:collapse">
+<tbody>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<th colspan="1" style="margin:0px;padding:5px 7px;vertical-align:top;font-size:10pt;line-height:13pt;color:rgb(0,0,0);border:1px solid rgb(221,221,221);min-width:0.6em;background-color:rgb(240,240,240)">HTTP Code</th>
+<th style="margin:0px;padding:5px 7px;vertical-align:top;font-size:10pt;line-height:13pt;color:rgb(0,0,0);border:1px solid rgb(221,221,221);min-width:0.6em;background-color:rgb(240,240,240)">Error Code</th>
+<th style="margin:0px;padding:5px 7px;vertical-align:top;font-size:10pt;line-height:13pt;color:rgb(0,0,0);border:1px solid rgb(221,221,221);min-width:0.6em;background-color:rgb(240,240,240)">Description</th>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><code style="margin-top:0px">400</code></td>
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><code style="margin-top:0px">MISSING_REQUIRED_FIELD</code></td>
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">A required field was not included in the request message (see&nbsp;<code style="margin-top:0px">fieldName</code>&nbsp;property).</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><code style="margin-top:0px">400</code></td>
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><code style="margin-top:0px">INVALID_FIELD</code></td>
+<td style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">A field in the request message contained an invalid value (see&nbsp;<code style="margin-top:0px">fieldName</code>&nbsp;property).</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><code style="margin-top:0px">403</code></td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><code style="margin-top:0px">INSUFFICIENT_PRIVILEGES</code></td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">This action requires additional privileges.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</td>
+</tr>
+<tr style="font-size:10pt;line-height:13pt;background-image:none">
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em"><strong style="margin-top:0px">Notes</strong></td>
+<td colspan="1" style="font-size:10pt;line-height:13pt;margin:0px;padding:5px 7px;background-image:none;border:1px solid rgb(221,221,221);min-width:0.6em">&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">Note that "curly braces" ("{" and "}") should be used to specify portions of a URI that the client must replace with actual values. Consider the following URI:</p>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">http://{host:port}/library/v2/books/{ISBN}/reviews/{reviewId}</pre>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">The values in curly braces must be replaced with real values before a request can be submitted to the URI above.</p>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">Using the "Create Book Review" API documented above, a valid request using JSON would look like this:</p>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">POST http://api.library.com/v2/books/0201709066/reviews<br>API-Key: 2f9f8-34fjf-943jf-293nf<br>Content-Type: application/json<br>Accept: application/json</pre>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">{"review": {"author":"John Doe", "comments":"Very informative.", "rating":4}, "desiredPayment":1.50}</pre>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">And this is how it looks using XML:</p>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">POST http://api.library.com/v2/books/0201709066/reviews<br>API-Key: 2f9f8-34fjf-943jf-293nf<br>Content-Type: application/xml<br>Accept: application/xml</pre>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">&lt;resource&gt;<br>    &lt;review&gt;<br>        &lt;author&gt;John Doe&lt;/author&gt;<br>        &lt;comments&gt;Very informative.&lt;/comments&gt;<br>        &lt;rating&gt;4&lt;/rating&gt;<br>    &lt;/review&gt;<br>    &lt;desiredPayment&gt;1.50&lt;/desiredPayment&gt;<br>&lt;/resource&gt;</pre>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">Notice that the "Max" column in the documentation above can have different meanings based on the element type. For instance, the "Max" field for a string element indicates the maximum field length. On the other hand, the "Max" field for a numeric field represents the maximum numerical value.</p>
+<h2 style="line-height:normal;padding:0px 0px 2px;font-size:1.6em;margin:2em 0px 0.5em;color:rgb(0,0,0);border-bottom-color:rgb(145,150,153);border-bottom-width:1px;border-bottom-style:solid">REST API Recommendations</h2>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">The following recommendations are intended to improve the consistency and reusability of REST services across SPI.</p>
+<h3 style="line-height:normal;padding:0px;font-size:1.4em;margin:1.5em 0px 0.5em;color:rgb(0,0,0)">URI Design</h3>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">URIs for REST services should be constructed according to the following recommendations.</p>
+<h4 style="line-height:normal;padding:0px;font-size:1.2em;margin:1.2em 0px 0.3em;color:rgb(0,0,0)">Avoid using verbs in URIs</h4>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">Except for rare cases when the controller pattern is deemed necessary, verbs should not be used in URIs (see "Designing with Nouns" section above).</p>
+<h4 style="line-height:normal;padding:0px;font-size:1.2em;margin:1.2em 0px 0.3em;color:rgb(0,0,0)">Avoid underscores and hyphens in URIs</h4>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">URIs and query strings should avoid the use of underscores and hyphens.</p>
+<h4 style="line-height:normal;padding:0px;font-size:1.2em;margin:1.2em 0px 0.3em;color:rgb(0,0,0)">Use camel case to separate words in a URI</h4>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">URIs and query strings should use camel case to separate words rather than underscores or hyphens.</p>
+<h4 style="line-height:normal;padding:0px;font-size:1.2em;margin:1.2em 0px 0.3em;color:rgb(0,0,0)">Do not specify the resource format in the URI</h4>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">Do not include artificial file extensions like *.xml or *.json to indicate the requested format of the response body. Rather, use the standard HTTP&nbsp;<code>Accept</code>&nbsp;header for this purpose.</p>
+<h4 style="line-height:normal;padding:0px;font-size:1.2em;margin:1.2em 0px 0.3em;color:rgb(0,0,0)">Include version information in URIs</h4>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">API version information should be included in the URI. This facilitates backwards compatibility even as new API versions are released. Version numbers should use incremental integers that are prefixed with a lower-case letter "v" like this:</p>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">http://rest.service.com/library/v1/books</pre>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">http://rest.service.com/library/v2/locations</pre>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">When upgrading to a new version of the API, simply update the URIs to the new version number.</p>
+<h4 style="line-height:normal;padding:0px;font-size:1.2em;margin:1.2em 0px 0.3em;color:rgb(0,0,0)">Do not include a trailing slash character in URIs</h4>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">URIs passed in the&nbsp;<code>Location</code>&nbsp;HTTP header or in the body of a response should not include a trailing slash.</p>
+<h4 style="line-height:normal;padding:0px;font-size:1.2em;margin:1.2em 0px 0.3em;color:rgb(0,0,0)">Use singular nouns for documents and plural nouns for collections and stores</h4>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">Documents, collections, and stores can be specified in a URI. Make it easy to distinguish between documents and the other resource types by using singular nouns for documents and plural nouns for collections and stores like this:</p>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">http://api.nfl.com/v1/divisions/nfcWest/teams/arizona/players/11</pre>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">In this URI, documents are represented by singular names/IDs "nfcWest", "arizona", and "11" while collections and stores use the plural names "divisions", "teams", and "players".</p>
+<h4 style="line-height:normal;padding:0px;font-size:1.2em;margin:1.2em 0px 0.3em;color:rgb(0,0,0)">Prefer concrete over abstract resource names</h4>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">Use concrete resource names like "books" and "orders" rather than abstract names like "items" or "elements".</p>
+<h4 style="line-height:normal;padding:0px;font-size:1.2em;margin:1.2em 0px 0.3em;color:rgb(0,0,0)">Use verbs or verb phrases for controller names</h4>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">The controller pattern is used when an action doesn't naturally map to one of the standard HTTP verbs. Controller resources are used like remote procedure calls. For this reason, controller names should use a verb or verb phrase that describe the action they perform. Consider the following URIs:</p>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">POST http://api.bank.com/v1/checkImage/process</pre>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">POST http://api.bank.com/v1/reindexDatabase</pre>
+<h4 style="line-height:normal;padding:0px;font-size:1.2em;margin:1.2em 0px 0.3em;color:rgb(0,0,0)">Pass filtering criteria in the query string</h4>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">When filtering the values returned from a collection or store, include any filtering criteria in the query string portion of the URI. Consider this URI:</p>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">GET http://api.bank.com/v1/customers/48282/accounts?status=active</pre>
+<h4 style="line-height:normal;padding:0px;font-size:1.2em;margin:1.2em 0px 0.3em;color:rgb(0,0,0)">Use the query string to support partial responses</h4>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">At times it is desirable to request only a portion of a resource. For instance, a mobile device might wish to get back only the customers name and address rather than a full customer record (for bandwidth or performance reasons). In this case, it would be advantageous for the client to be able to specify which fields it wants included in or excluded from the response. The "elements" query string parameter should be used for this type of filtering like this:</p>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">GET&nbsp;http://rest.service.com/library/v1/customers/1234?elements=firstName,lastName,address</pre>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">Individual elements could also be excluded like this:</p>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">GET&nbsp;http://rest.service.com/library/v1/customers/1234?elements=!photo</pre>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">or like this to exclude multiple elements:</p>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">GET&nbsp;http://rest.service.com/library/v1/customers/1234?elements=!(ssn,photo)</pre>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">Note that the comma, exclamation point, and parentheses are used as special characters or delimiters in the URIs above. Those characters are considered "reserved" by the URI specification for cases like this. The specification indicates that reserved characters should NOT be percent-encoded when being used as a delimiter or special character. However, those same characters within a delimited value must be encoded so as not to conflict with the delimiter. This rule is stated in&nbsp;<a href="http://tools.ietf.org/html/rfc3986#section-2.2" rel="nofollow" style="color:rgb(0,109,175);outline:none">RFC 3986</a>&nbsp;as follows:</p>
+<blockquote style="font-style:italic;font-size:10pt;border-left-width:1px;border-left-style:solid;padding:0px 20px;margin:10px 20px;border-left-color:rgb(60,120,181)">
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:0px">URIs include components and subcomponents that are delimited by characters in the "reserved" set. These characters are called "reserved" because they may (or may not) be defined as delimiters by the generic syntax, by each scheme-specific syntax, or by the implementation-specific syntax of a URI's dereferencing algorithm. If data for a URI component would conflict with a reserved character's purpose as a delimiter, then the conflicting data must be percent-encoded before the URI is formed.</p>
+</blockquote>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">In our case, we are defining the use of comma, exclamation point, and parentheses as an "implementation-specific syntax" so they should not be encoded when used in that manner.</p>
+<h4 style="line-height:normal;padding:0px;font-size:1.2em;margin:1.2em 0px 0.3em;color:rgb(0,0,0)">Use the query string to support pagination</h4>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">REST services often support server-side pagination of data in order to simplify client logic and reduce network traffic. For instance, a client may wish to receive a list of books available in a library but not all books at once. In this case, the client should be able to specify the starting index in the list of books and the number of books that should be returned. The query string should be used to pass this pagination information. Specifically, it is recommended that query parameters of "offset" and "limit" be used to indicate the starting record (zero-based) and the total number of records to return. Here's an example that should return the first 10 books from the library:</p>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">GET&nbsp;http://rest.service.com/library/v1/books?offset=0&amp;limit=10</pre>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">And this request returns books 100 through 149:</p>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">GET&nbsp;http://rest.service.com/library/v1/books?offset=100&amp;limit=50</pre>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">It is also recommended for APIs that support pagination to return the total number of records in the response body. This allows clients to create UIs that indicate where the returned subset of records fits into the entire collection (e.g., "page 5 of 63" or "items 50-59 of 625").</p>
+<h4 style="line-height:normal;padding:0px;font-size:1.2em;margin:1.2em 0px 0.3em;color:rgb(0,0,0)">Prefer relative over absolute URIs</h4>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">Relative URIs should be preferred when returning links within the response body. Absolute URIs include the host and port information whereas relative URIs contain only the path, query string, and fragment components. There are several reasons to prefer relative URIs including:</p>
+<ul style="margin:1em 0px;padding-left:3em;font-size:10pt;line-height:13pt;padding-top:0px"><li style="font-size:10pt;line-height:13pt;margin:0px;padding:0px">relative URIs tell the client that the same security credentials can be used to access the resource (since host/port do not change)</li>
+<li style="font-size:10pt;line-height:13pt;margin:0px;padding:0px">it may be difficult to determine the real virtual host name when constructing absolute URIs</li>
+<li style="font-size:10pt;line-height:13pt;margin:0px;padding:0px">absolute URIs may expose cross-site scripting issues</li></ul>
+<h3 style="line-height:normal;padding:0px;font-size:1.4em;margin:1.5em 0px 0.5em;color:rgb(0,0,0)">HTTP Methods</h3>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">These recommendations in this section are specific to requests.</p>
+<h4 style="line-height:normal;padding:0px;font-size:1.2em;margin:1.2em 0px 0.3em;color:rgb(0,0,0)">Use HTTP methods to operate on resources</h4>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">Use the standard HTTP methods (POST, GET, PUT, DELETE) to manipulate resources whenever possible. The constructor pattern or POX style service should only be used when an action can't be naturally mapped to one of the HTTP verbs.</p>
+<h4 style="line-height:normal;padding:0px;font-size:1.2em;margin:1.2em 0px 0.3em;color:rgb(0,0,0)">Use GET to retrieve representations of resources</h4>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">Since GET is both safe and idempotent, it should always be used to retrieve representations of resources. Do not overload other methods to provide this functionality. Representations returned using other methods won't be cached.</p>
+<h4 style="line-height:normal;padding:0px;font-size:1.2em;margin:1.2em 0px 0.3em;color:rgb(0,0,0)">Use PUT to create and update stored resources</h4>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">PUT should be used whenever creating a new resource whose URI is assigned by the client (see store pattern in "Resource Patterns" section above). It should also be used whenever updating a collection or store resource.</p>
+<h4 style="line-height:normal;padding:0px;font-size:1.2em;margin:1.2em 0px 0.3em;color:rgb(0,0,0)">Use POST to create resources in a collection</h4>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">POST should be used for creating new resources in a collection (see collection pattern in "Resource Patterns" section above).</p>
+<h4 style="line-height:normal;padding:0px;font-size:1.2em;margin:1.2em 0px 0.3em;color:rgb(0,0,0)">Use POST to execute controller actions</h4>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">Since POST is the only HTTP method whose purpose isn't strictly prescribed, always use POST to execute a controller action.</p>
+<h4 style="line-height:normal;padding:0px;font-size:1.2em;margin:1.2em 0px 0.3em;color:rgb(0,0,0)">Use DELETE to remove resources</h4>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">DELETE should always be used to remove resources. Avoid using an overloaded POST for this purpose.</p>
+<h4 style="line-height:normal;padding:0px;font-size:1.2em;margin:1.2em 0px 0.3em;color:rgb(0,0,0)">Support the OPTIONS method</h4>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">The OPTIONS method is meant to convey the actions that can be performed on the specified resource. In response to an OPTIONS call to a particular resource, the server should return a comma-delimited list of HTTP methods that the resource supports in the&nbsp;<code>Allow</code>&nbsp;header. The response should contain no body. For example, a typical collection resource might return "<code>Allow: GET,OPTIONS,POST</code>" in response to an OPTIONS call.</p>
+<h3 style="line-height:normal;padding:0px;font-size:1.4em;margin:1.5em 0px 0.5em;color:rgb(0,0,0)">HTTP Headers</h3>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">These recommendations are specific to HTTP headers.</p>
+<h4 style="line-height:normal;padding:0px;font-size:1.2em;margin:1.2em 0px 0.3em;color:rgb(0,0,0)">Content-Type header should always be used</h4>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">An accurate&nbsp;<code>Content-Type</code>&nbsp;header should accompany every request and response that contain a message body. Supported text formats include "application/json", "application/xml", and "application/x-www-form-urlencoded".</p>
+<h4 style="line-height:normal;padding:0px;font-size:1.2em;margin:1.2em 0px 0.3em;color:rgb(0,0,0)">Accept header should be used for content negotiation</h4>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">The client should include an&nbsp;<code>Accept</code>&nbsp;header in order to indicate the desired response format. However, if the request includes a message body (such as a POST or PUT request) as well as a<code>Content-Type</code>&nbsp;header that describes the message format, then the&nbsp;<code>Accept</code>&nbsp;header is optional. If the&nbsp;<code>Accept</code>&nbsp;header is not included, the service's response should be in the same format as the client's request.</p>
+<h4 style="line-height:normal;padding:0px;font-size:1.2em;margin:1.2em 0px 0.3em;color:rgb(0,0,0)">Pass resource URIs in response body in addition to the Location header</h4>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">REST usually utilizes the HTTP&nbsp;<code>Location</code>&nbsp;response header to return the URI assigned to a newly created resource. However, some standards dictate that this URI be returned in a "links" collection within the response body. To remain consistent with standard REST practices, include the URI to the new resource in both the&nbsp;<code>Location</code>&nbsp;header and the response body.</p>
+<h4 style="line-height:normal;padding:0px;font-size:1.2em;margin:1.2em 0px 0.3em;color:rgb(0,0,0)">Use appropriate HTTP status codes in response headers</h4>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">Error conditions should be mapped to the standard HTTP status code that most closely describes the problem. Additional detail can then be included in the response body. Do not "tunnel" error conditions through a successful 200 "OK" response that contains error information only in the message body. API design should not violate REST principles simply to accommodate clients with a limited HTTP vocabulary (though a proxy service can be created for this purpose if necessary).</p>
+<h4 style="line-height:normal;padding:0px;font-size:1.2em;margin:1.2em 0px 0.3em;color:rgb(0,0,0)">Include additional error detail in response body</h4>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">Since HTTP status codes often cover a broad range of error conditions (e.g., "bad request"), more detailed error conditions should be returned in the body of the response. For example, the following response indicates that the 400 response was returned due to validation errors in two parameters:</p>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">HTTP/1.1 400 Bad Request<br>Content-Type: application/json</pre>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">{"errors": [<br>"error": {"code":"MISSING_REQUIRED_FIELD", "description":"A required parameter is missing.", "fieldName":"author"},<br>"error": {"code":"INVALID_FIELD", "description":"A submitted value was invalid.", "fieldName":"rating", "fieldValue":"five"}<br>]}</pre>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">It is also recommended that descriptive string literals be used for error codes rather than numbers. This convention removes one level of abstraction and improves readability of client code since comparisons will be made against human readable strings instead of cryptic numeric values.</p>
+<h4 style="line-height:normal;padding:0px;font-size:1.2em;margin:1.2em 0px 0.3em;color:rgb(0,0,0)">Include an ETag header in GET responses to facilitate caching</h4>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">The HTTP&nbsp;<code>ETag</code>&nbsp;response header (a.k.a., "entity tag") specifies a unique value that changes each time a resource is modified. Since responses to POST, PUT, and DELETE requests are not eligible for caching, only GET responses should include this header. It is recommended that the&nbsp;<code>ETag</code>&nbsp;header contain a numeric value indicating the exact time the resource was last modified (typically the number of milliseconds since January 1, 1970). A response including the&nbsp;<code>ETag</code>&nbsp;header looks like this:</p>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">HTTP/1.1 200 OK<br>Date: Wed, 5 Sep 2012 06:25:24 GMT<br>Content-Type: application/json<br>ETag: "1346847924572"</pre>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">{"isbn":"1146104553", "author":"Leo Tolstoy", "title":"War and Peace"}</pre>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">To cache this request, the client (or proxy server) can store the response along with the ETag value. The next time this resource is requested, the client can pass the ETag value in the&nbsp;<code>If-None-Match</code>&nbsp;request header&nbsp;to specify that a new representation should be returned only if the resource's ETag value has changed (indicating that the resource has changed since the response was cached). Here's an example request:</p>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">GET http://rest.service.com/library/v1/books/1146104553<br>Accept: application/json<br>If-None-Match: "1346847924572"</pre>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">If the resource's current ETag value is different from the&nbsp;<code>If-None-Match</code>&nbsp;header then the resource is returned normally since it has changed since the client last retrieved it. Otherwise, the service should return an HTTP 304 (Not Modified) response without any body indicating that the client should use their locally cached version.</p>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">Note that the&nbsp;<code>Last-Modified</code>,&nbsp;<code>If-Modified-Since</code>, and&nbsp;<code>Expires</code>&nbsp;HTTP headers can also be employed to support caching. These headers include dates and times that indicate when a resource was last changed or when a cached version should be considered stale. Though these headers can be used to assist with caching,&nbsp;<code>ETag</code>&nbsp;is recommended since it avoids the complexities around working with specific times.</p>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">If the length of time until a resource is considered stale can be reasonably approximated, use the&nbsp;<code>Cache-Control</code>&nbsp;header with the&nbsp;<code>max-age</code>&nbsp;option like this:</p>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">HTTP/1.1 200 OK<br>Date: Wed, 5 Sep 2012 06:25:24 GMT<br>Content-Type: application/json<br>Cache-Control: max-age=3600, must-revalidate</pre>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">{"isbn":"1146104553", "author":"Leo Tolstoy", "title":"War and Peace"}</pre>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">The&nbsp;<code>Cache-Control</code>&nbsp;header shown above instructs the client that the response can be considered fresh (i.e., cached) for one hour after which a new representation must be retrieved from the server.</p>
+<blockquote style="font-style:italic;font-size:10pt;border-left-width:1px;border-left-style:solid;padding:0px 20px;margin:10px 20px;border-left-color:rgb(60,120,181)">
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:0px">NOTE: If a resource is extremely time sensitive and should be considered stale immediately upon delivery, the response should include a&nbsp;<code>Cache-Control</code>&nbsp;header with the value of "<code>no-cache</code>". If no caching instructions are returned, all caching decisions are left to the client.</p>
+</blockquote>
+<h3 style="line-height:normal;padding:0px;font-size:1.4em;margin:1.5em 0px 0.5em;color:rgb(0,0,0)">API Versioning</h3>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">The recommendations in this section are specific to API versioning.</p>
+<h4 style="line-height:normal;padding:0px;font-size:1.2em;margin:1.2em 0px 0.3em;color:rgb(0,0,0)">Versioning should be mandatory in every API</h4>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">To allow APIs to evolve without adversely affecting existing clients, all APIs should include version information.</p>
+<h4 style="line-height:normal;padding:0px;font-size:1.2em;margin:1.2em 0px 0.3em;color:rgb(0,0,0)">Versions should change infrequently</h4>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">As long as they are not changed in a manner that could break existing clients, APIs should be able to evolve without changing the version. For example, adding new resources or supporting new operations for existing resources should not require a new version since these additions would not adversely affect existing clients. Similarly, adding optional parameters to existing APIs (as long as the API's behavior is not modified) would not require updating version information. In contrast, anytime a resource or operation is removed from service or a new required parameter is introduced, version information should be updated to indicate a change that breaks backwards compatibility. Integers are preferred for versioning because point releases imply frequent version changes.</p>
+<h4 style="line-height:normal;padding:0px;font-size:1.2em;margin:1.2em 0px 0.3em;color:rgb(0,0,0)">Versions should be maintained for at least one cycle</h4>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">At a minimum, the current version and the previous one should always be available. Another common rule of thumb is to maintain a version for at least 18 months. Beyond that, it is left to the judgement of the service provider as to how long older versions should be maintained. Versions should be documented as deprecated for at least one cycle before being made obsolete (i.e., removed from service).</p>
+<h3 style="line-height:normal;padding:0px;font-size:1.4em;margin:1.5em 0px 0.5em;color:rgb(0,0,0)">Miscellaneous</h3>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">This section contains miscellaneous recommendations that don't fit into another category.</p>
+<h4 style="line-height:normal;padding:0px;font-size:1.2em;margin:1.2em 0px 0.3em;color:rgb(0,0,0)">APIs should be "symmetric"</h4>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">An API is considered symmetric if it accepts and returns representations in the same format. For example, an API that accepts JSON should generally respond in that same format. A common exception to this rule is a REST service that accepts POSTed requests directly from an HTML form in "application/x-www-form-urlencoded" format. This service might choose to respond in a different format that supports hierarchical elements (e.g., JSON or XML). That said, a REST service that supports both JSON and XML should still honor the request's<code>Content-Type</code>&nbsp;and&nbsp;<code>Accept</code>&nbsp;headers even when they are different.</p>
+<h4 style="line-height:normal;padding:0px;font-size:1.2em;margin:1.2em 0px 0.3em;color:rgb(0,0,0)">Use a root element of "resource" in all XML representations</h4>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">It can be challenging to document an API that returns both JSON and XML since XML requires a root element and JSON does not. For this reason, it is often simpler to use the same root element for all XML responses. A root element name of "resource" is recommended for all XML representations. The following XML illustrates this suggestion:</p>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">&lt;resource&gt;<br>    &lt;review&gt;<br>        &lt;author&gt;John Doe&lt;/author&gt;<br>        &lt;comments&gt;Very informative.&lt;/comments&gt;<br>        &lt;rating&gt;4&lt;/rating&gt;<br>    &lt;/review&gt;<br>    &lt;desiredPayment&gt;1.50&lt;/desiredPayment&gt;<br>&lt;/resource&gt;</pre>
+<h4 style="line-height:normal;padding:0px;font-size:1.2em;margin:1.2em 0px 0.3em;color:rgb(0,0,0)">Do not use anonymous JSON objects in resource representations</h4>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">Use of anonymous JSON objects is very common in the JavaScript world. The following example demonstrates two anonymous objects inside of the "links" collection:</p>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">{"author":"Leo Tolstoy", "title":"War and Peace", "links": [<br>{"rel":"create-book-review", "href":"/books/0201709066/reviews", "method":"POST"},<br>{"rel":"view-book-review", "href":"/books/0201709066/reviews/1", "method":"GET"}<br>]}</pre>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">Notice how the "links" collection contains two unnamed objects that each contain "rel", "href", and "method" properties. Since this format can't be represented in XML without adding an enclosing element for each link, objects in JSON arrays should be constructed in this manner:</p>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">{"author":"Leo Tolstoy", "title":"War and Peace", "links": [<br>"link": {"rel":"create-book-review", "href":"/books/0201709066/reviews", "method":"POST"},<br>"link": {"rel":"view-book-review", "href":"/books/0201709066/reviews/1", "method":"GET"}<br>]}</pre>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">Though not technically required, notice how applying the object name of "link" to each item in the array allows this JSON representation to be unambiguously expressed in XML like this:</p>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">&lt;resource&gt;<br>    &lt;author&gt;Leo Tolstoy&lt;/author&gt;<br>    &lt;title&gt;War and Peace&lt;/title&gt;<br>    &lt;links&gt;<br>        &lt;link&gt;<br>            &lt;rel&gt;create-book-review&lt;/rel&gt;<br>            &lt;href&gt;/books/0201709066/reviews&lt;/href&gt;<br>            &lt;method&gt;POST&lt;/method&gt;<br>        &lt;/link&gt;<br>        &lt;link&gt;<br>            &lt;rel&gt;view-book-review&lt;/rel&gt;<br>            &lt;href&gt;/books/0201709066/reviews/1&lt;/href&gt;<br>            &lt;method&gt;GET&lt;/method&gt;<br>        &lt;/link&gt;<br>    &lt;/links&gt;<br>&lt;/resource&gt;</pre>
+<h4 style="line-height:normal;padding:0px;font-size:1.2em;margin:1.2em 0px 0.3em;color:rgb(0,0,0)">Responses should include links operations that can be performed on the current resource</h4>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">REST services should return links to resources and operations that are likely to be of interest to a client in the current state.&nbsp;For example, consider the following request that creates a new book review:</p>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px"><code>POST&nbsp;<span>http://rest.service.com/library/v2/books/0201709066/reviews</span></code></p>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">The response to this request should include links that indicate how the new resource can be manipulated as shown here in JSON:</p>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">{"links": [<br>"link": {"rel":"create-book-review", "href":"/books/0201709066/reviews", "method":"POST"},<br>"link": {"rel":"view-book-review", "href":"/books/0201709066/reviews/1", "method":"GET"},<br>"link": {"rel":"update-book-review", "href":"/books/0201709066/reviews/1", "method":"PUT"},<br>"link": {"rel":"delete-book-review", "href":"/books/0201709066/reviews/1", "method":"DELETE"}<br>]}</pre>
+<h4 style="line-height:normal;padding:0px;font-size:1.2em;margin:1.2em 0px 0.3em;color:rgb(0,0,0)">Meta-Data Locations</h4>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">Meta-data that is specific to a particular resource should be specified in the query string. Examples of this type of meta-data include filtering, operation, and pagination information. Meta-data that represents cross-cutting concerns such as security or tracking should be included in the HTTP header. This type of meta-data is more "universal" and not specific to a single resource. Examples of meta-data that should be included in the HTTP header include authentication, tracking, and locale information.</p>
+<h4 style="line-height:normal;padding:0px;font-size:1.2em;margin:1.2em 0px 0.3em;color:rgb(0,0,0)">Avoid redundant resources</h4>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">Though each URI cannot reference more than one resource, it is possible to have more than one URI point to the same resource. This practice should be avoided since it adds complexity to the API without any additional value.</p>
+<h4 style="line-height:normal;padding:0px;font-size:1.2em;margin:1.2em 0px 0.3em;color:rgb(0,0,0)">Use warning headers as necessary</h4>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">HTTP defines&nbsp;<code>Warning</code>&nbsp;headers that can be utilized by the server to convey information to the client that is not evident from the status code or response body. Multiple warning headers are allowed with warning precedence established by their order within the headers list (with the top warning being the most critical). More information about HTTP warnings is available in&nbsp;<a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.46" rel="nofollow" style="color:rgb(0,109,175);outline:none">RFC 2616</a>.&nbsp;Warnings should include a numeric warning ID followed by a description in human readable form. Here is an example:</p>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">HTTP/1.1 200 OK<br>Date: Wed, 5 Sep 2012 06:25:24 GMT<br>Content-Type: application/json<br>Warning: 15 Account balance retrieved from cache</pre>
+<h4 style="line-height:normal;padding:0px;font-size:1.2em;margin:1.2em 0px 0.3em;color:rgb(0,0,0)">Document ID rules</h4>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">The numeric ID assigned to document resources should meet the following requirements:</p>
+<ul style="margin:1em 0px;padding-left:3em;font-size:10pt;line-height:13pt;padding-top:0px"><li style="font-size:10pt;line-height:13pt;margin:0px;padding:0px">Globally unique OR unique within its parent resource</li>
+<li style="font-size:10pt;line-height:13pt;margin:0px;padding:0px">Should not be sensitive or private (may be publicly displayed in the URI)</li>
+<li style="font-size:10pt;line-height:13pt;margin:0px;padding:0px">May be sequential or unique random</li>
+<li style="font-size:10pt;line-height:13pt;margin:0px;padding:0px">Persistent so that clients can store the ID and reliably reference it later</li></ul>
+<h4 style="line-height:normal;padding:0px;font-size:1.2em;margin:1.2em 0px 0.3em;color:rgb(0,0,0)">Collection resource representations should include document links</h4>
+<p style="font-size:10pt;line-height:13pt;background-image:none;padding:0px;margin-bottom:10px">Performing a GET request on a collection resource should return summary information for the documents in the collection. This summary information should always include the URI to each document returned. Consider the following example:</p>
+<pre style="padding:0px;margin-top:10px;margin-bottom:10px;overflow:visible">&lt;books href="<span>/library/v1/books</span>"&gt;<br>    &lt;book href="<span>/library/v1/books/0201709066</span>"&gt;<br>        &lt;author&gt;Leo Tolstoy&lt;/author&gt;<br>        &lt;title&gt;War and Peace&lt;/title&gt;<br>    &lt;/book&gt;<br>    &lt;book href="<span>/library/v1/books/0486406512</span>"&gt;<br>        &lt;author&gt;Charles Dickens&lt;/author&gt;<br>        &lt;title&gt;A Tale of Two Cities&lt;/title&gt;<br>    &lt;/book&gt;<br>    &lt;book href="<span>/library/v1/books/161382310X</span>"&gt;<br>        &lt;author&gt;Herman Melville&lt;/author&gt;<br>        &lt;title&gt;Moby Dick&lt;/title&gt;<br>    &lt;/book&gt;<br>&lt;/books&gt;</pre>
+</dl>
+</div>
+</body>
+</html>
