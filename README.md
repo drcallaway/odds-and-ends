@@ -1,6 +1,6 @@
-# Odds and Ends
+# Odds and Ends (circa 2012)
 
-This is a collection of articles and code samples I created circa 2012.
+This is a collection of articles and code samples I created a long time ago.
 
 [How to Create a RESTful Web Service](https://htmlpreview.github.io/?https://github.com/drcallaway/odds-and-ends/blob/main/how-to-create-rest-service.html)
 
@@ -13,3 +13,6 @@ This is a collection of articles and code samples I created circa 2012.
 [Java HTTP Server](java-http-server.md)
 
 [Interview Questions](interview-questions.md)
+
+## Open Source Projects
+[REST Client plugin for IDEA](https://code.google.com/archive/p/restclient-idea-plugin/)
