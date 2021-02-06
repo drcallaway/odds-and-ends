@@ -9,3 +9,5 @@ This is a collection of articles and code samples I created circa 2012.
 [What's New in JDK 1.5](https://github.com/drcallaway/odds-and-ends/blob/main/WhatsNewinJDK5.ppt)
 
 [Structures and Algorithms](structures-algorithms.md)
+
+[Java HTTP Server](java-http-server.md)
