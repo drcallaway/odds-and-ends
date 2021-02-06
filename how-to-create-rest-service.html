@@ -1,0 +1,938 @@
+<p>REST is an architectural style for implementing web services over
+standard HTTP. You can learn more about REST from the following
+resources:</p>
+<p><a href="http://www.xfront.com/REST-Web-Services.html" rel="nofollow" title="http://www.xfront.com/REST-Web-Services.html">Building Web Services the REST Way</a></p>
+<p><a href="http://www.xfront.com/REST.html" rel="nofollow" title="http://www.xfront.com/REST.html">Introduction to REST Slide Deck</a></p>
+<p><a href="http://rest.blueoxen.net/cgi-bin/wiki.pl?BenjaminsRESTTutorial" rel="nofollow" title="http://rest.blueoxen.net/cgi-bin/wiki.pl?BenjaminsRESTTutorial">REST Tutorial</a></p>
+<p><a href="http://www.xml.com/pub/a/2004/12/01/restful-web.html" rel="nofollow" title="http://www.xml.com/pub/a/2004/12/01/restful-web.html">How to Create a REST Protocol</a></p>
+<p><a href="http://www.crummy.com/writing/RESTful-Web-Services/" rel="nofollow" title="http://www.crummy.com/writing/RESTful-Web-Services/">RESTful Web Services book</a></p>
+<p><a href="http://webservices.xml.com/pub/a/ws/2002/02/06/rest.html" rel="nofollow" title="http://webservices.xml.com/pub/a/ws/2002/02/06/rest.html">Second Generation Web Services</a></p>
+<p><a href="http://webservices.xml.com/pub/a/ws/2002/02/20/rest.html" rel="nofollow" title="http://webservices.xml.com/pub/a/ws/2002/02/20/rest.html">REST and the Real World</a></p>
+<p><a href="http://wiki.developer.mindtouch.com/REST/REST_for_the_Rest_of_Us" rel="nofollow" title="http://webservices.xml.com/pub/a/ws/2002/02/20/rest.html">REST for the Rest of Us<br>
+</a></p>
+<br>
+<h2> Java API for RESTful Web Services </h2>
+<p>The JAX-RS (Java API for RESTful Web Services) specification
+presented in JSR 311 defines a standard way to deploy RESTful web
+services using annotated POJOs (plain old Java objects). For detailed
+information, you can read the JSR <a href="https://jsr311.dev.java.net/" rel="nofollow" title="https://jsr311.dev.java.net/">here</a>.
+In this article, we'll use JAX-RS to create a simple sample application that allows
+you to add, retrieve, and delete books from a virtual library.<br>
+</p>
+<p><br>
+</p>
+<div style="float:right;margin-left:5px"><br>
+</div>
+<h2> Design the REST API</h2>
+<p>The first thing to do when creating a new RESTful web service is to
+define an API that exposes service functionality to the web service
+client. REST is often called a Resource Oriented Architecture (ROA)
+since it is based on resources that are uniquely addressable via URIs
+(Uniform Resource Identifier). A REST API exposes the ability to
+perform a small set of operations on these resources. Essentially,
+there are four important elements within a REST service call that must
+be defined by the service author. These elements are as follows:
+</p>
+<ul><li> HTTP method
+</li>
+<li> URI
+</li>
+<li> Request body
+</li>
+<li> Response
+</li></ul>
+<p>Let's take a closer look at each of these elements.</p>
+<h3> HTTP Method </h3>
+<p>The HTTP method indicates the type of action that should be taken on
+the resource specified by the URI. RESTful services typically use four
+methods that roughly equate the standard CRUD (create, read, update,
+delete) operations as follows:
+</p>
+<table border="1" cellpadding="3" cellspacing="0">
+
+<tbody>
+<tr>
+<th>HTTP Method
+</th>
+<th>CRUD Operation
+</th>
+</tr>
+<tr>
+<td>GET
+</td>
+<td>read
+</td>
+</tr>
+<tr>
+<td>POST
+</td>
+<td>create a new server-identified resource (occasionally used for update)
+</td>
+</tr>
+<tr>
+<td>PUT
+</td>
+<td>update an existing resource or create a new client-identified resource
+</td>
+</tr>
+<tr>
+<td>DELETE
+</td>
+<td>delete
+</td>
+</tr>
+</tbody>
+</table>
+<p>The GET method is used for calls that have no side effects on the
+server (any calls that have no side effects should always use GET). An
+example of this would be when retrieving information about a book. No
+transaction is taking place so the book can be retrieved any number of
+times without altering state on the server. A typical GET method call
+looks like this:
+</p>
+<pre>GET http://{server}/MyRestService/library/books/12345</pre>
+<p>Notice that the PUT and POST operations can both be used to create
+and update resources. This has been a cause of much confusion when
+creating REST services. Here is a hint from the book <i>RESTful Web Services</i> to help you decide when to use each method:
+</p>
+<dl><dd>"The difference between PUT and POST is this: the client uses
+PUT when it’s in charge of deciding which URI the new resource should
+have. The client uses POST when the server is in charge of deciding
+which URI the new resource should have."
+</dd>
+</dl>
+<p>Another way of stating this rule is to say that PUT should be used
+when creating a new URI and POST when calling an existing URI. So, you
+use PUT to create (as well as update) resources when the client
+controls the URI that references the resource. For example, the client
+can create a new book that is referenced by an ISBN number assigned by
+the client in this manner:
+</p>
+<pre>PUT http://{server}/MyRestService/library/books/12345</pre>
+<p>Notice that the client passed the ID (12345) by which this book will
+be referenced. This call creates a new book resource that can be
+accessed as shown in the GET method above. In this case, the PUT
+operation is appropriate because the client is responsible for
+specifying the URI that uniquely identifies the book. On the other
+hand, consider a service call where the client doesn't specify the URI:
+</p>
+<pre>POST http://{server}/MyRestService/library/books/12345/reviews</pre>
+<p>This call creates a review for the specified book. In a case like
+this, the server will return the URI by which the review can be
+referenced in the <code>Location</code> header of the HTTP response.
+This URI allows the client to retrieve the review using a URI created
+by the server. The GET call would look something like this:
+</p>
+<pre>GET http://{server}/MyRestService/library/books/12345/reviews/2937846292</pre>
+<p>In this case, the new review resource is known as a <i>subordinate resource</i>.
+A subordinate resource is a resource that only exists in relation to
+some parent resource. In other words, a review cannot exist on its own
+without being attached to a book. POST is usually used for creating
+subordinate resources. PUT and POST can both be used for updating resources but PUT replaces the entire resource while POST may update only a portion of it. For example, if the PUT request shown above is called a second time with a different book representation, the entire book with ID 12345 will be replaced with the new representation. In order to update just a portion of the resource using PUT, you would need to create a new subordinate resource. For example, if the book had a "checkedOut" property, we could use PUT to set this property by defining a new resource at this URL:</p>
+<pre>PUT http://{server}/MyRestService/library/books/12345/checkedOut</pre>
+<p>This new resource would allow you to update just one property of book 12345 using PUT (since it is replacing the entire checkedOut resource). POST could also be used to modify book 12345 without the new resource (often called an "overloaded POST") but that approach isn't as true to REST principles.<br>
+</p>
+<p>Note that PUT is <i>idempotent</i> while POST is not.
+Idempotent means that the operation can be safely performed multiple
+times. Consider how performing the same PUT operation multiple times
+does not change the server state (since subsequent PUT requests would
+simply replace the original resource with an identical representation).
+POST, on the other hand, is not idempotent because it creates a new
+resource with each call. Performing multiple identical POST operations
+causes the server state to change with every execution (as a new
+resource is created each time).
+</p>
+<p>These are the key differences between the PUT and POST methods.
+Hopefully these general rules will help you when choosing which method
+to use in your REST service.
+</p>
+<p>Finally, the DELETE method is used to delete resources. Like PUT, DELETE is idempotent and it operates on an entire resource. That is, the whole resource is must be deleted rather than just a part of it. A typical DELETE method call looks like this:
+</p>
+<pre>DELETE http://{server}/MyRestService/library/books/12345</pre>
+<p>After deleting a resource, it is no longer available. In this case,
+issuing a GET request to this resource would return an HTTP status code
+of 404 (Not Found).
+</p>
+<h3> URI </h3>
+<p>The URIs by which resources are referenced are an important part of
+the REST API. One of the most fundamental REST principles is that URIs
+should represent nouns, not verbs. There are two good reasons for this.
+First, the actions that can be performed have already been defined by
+the HTTP protocol (GET, POST, PUT, DELETE). We should not be defining
+new actions through naming resources using verbs. Second, since REST
+requires us to specify an action based on the standard HTTP methods
+with each call, it only makes sense that this action would be performed
+against a concrete resource (noun) as opposed to another action (verb).
+For example, consider the following URI:
+</p>
+<pre>GET http://{server}/MyRestService/library/getBooks</pre>
+<p>In essence, this URI is saying "get the getBooks resource". This is
+redundant and a bit confusing. A better way to express this idea is
+through a URI like this:
+</p>
+<pre>GET http://{server}/MyRestService/library/books</pre>
+<p>This URI just says "get the books resource". The representation of
+the books resource would naturally be a list of books stored in the
+library.
+</p>
+<p>Another common guideline is to use plural nouns for collections
+of items and perform actions against this collection. For example,
+consider the following service calls:
+</p>
+<table border="1" cellpadding="3" cellspacing="0">
+
+<tbody>
+<tr>
+<th>Service Call
+</th>
+<th>Description
+</th>
+</tr>
+<tr>
+<td><code>GET http://{server}/MyRestService/library/books</code>
+</td>
+<td>Get a list of books
+</td>
+</tr>
+<tr>
+<td><code>PUT http://{server}/MyRestService/library/books/12345</code>
+</td>
+<td>Create a new book with ISBN 12345
+</td>
+</tr>
+<tr>
+<td><code>GET http://{server}/MyRestService/library/books/12345</code>
+</td>
+<td>Get a single book with ISBN 12345
+</td>
+</tr>
+<tr>
+<td><code>DELETE http://{server}/MyRestService/library/books/12345</code>
+</td>
+<td>Delete a single book with ISBN 12345
+</td>
+</tr>
+</tbody>
+</table>
+<p>Notice how the last GET operation and the DELETE operation
+referenced an individual book through the books collection. This
+conveys the idea that we are retrieving a single book from the
+collection of all books.
+</p>
+<p>The URIs for REST services will typically grow in a
+hierarchical fashion. For example, imagine that our library service
+allowed patrons to attach a review to each book. To accommodate this
+use case, the URI for this service should first reference the book to
+which the review applies and then the review itself in this manner:
+</p>
+<pre>GET http://{server}/MyRestService/library/books/12345/reviews/1</pre>
+<p>To get a list of all reviews pertaining to the book identified by ISBN 12345, we could use a URI like this:
+</p>
+<pre>GET http://{server}/MyRestService/library/books/12345/reviews</pre>
+<h3> Request Body </h3>
+<p>Most REST service calls do not contain any information in the body
+of the request. This is due to the fact that the HTTP header often
+includes all the information needed to invoke a service. The HTTP
+header includes the HTTP method, URI, and all HTTP header fields. In
+fact, certain HTTP methods, such as GET and DELETE, do not support any
+data in the body of the request at all. However, HTTP methods that
+create or modify resources, such as POST and PUT, should include the
+information necessary to perform that action. For instance, a PUT
+operation by definition should always include a full representation of
+the resource being created or replaced. On the other hand, a POST
+operation may include just enough information required by the service
+to create or update a resource.
+</p>
+<p>The important thing to know about the request body is that it
+is unique to each service. The service designer must define the format
+of the request body and convey that to service consumers. Information
+in the request body is typically encoded in XML or JSON format. Here is
+a typical HTTP request that contains XML information within the body:
+</p>
+<pre>POST http://www.sourcestream.com/books HTTP/1.1<br>Content-Type: application/xml<br><br>&lt;Book&gt;<br>    &lt;Title&gt;Inside Servlets&lt;/Title&gt;<br>    &lt;URI&gt;http://http://www.amazon.com/Inside-Servlets-Server-Side-Programming-Platform/dp/0201709066/ref=sr_1_1?ie=UTF8&amp;qid=1321917641&amp;sr=8-1&lt;/URI&gt;<br>&lt;/Book&gt;<br></pre>
+<p>The sample HTTP request above indicates that the client is creating
+a new book by performing a POST to the books resource. The
+Content-Type header indicates that the request body is formatted in
+XML.
+</p>
+<h3> Response </h3>
+<p>The response to a REST service call contains various information of
+interest to the client. To begin, a REST response always includes a
+status code that conveys the result of the requested operation. The
+available status codes are defined by the HTTP specification and are
+grouped into 5 ranges that convey a general meaning. These five ranges
+are as follows:
+</p>
+<table border="1" cellpadding="3" cellspacing="0">
+
+<tbody>
+<tr>
+<th>Range
+</th>
+<th>Description
+</th>
+</tr>
+<tr>
+<td>1xx (Meta)
+</td>
+<td>Used only in negotiations with HTTP server.
+</td>
+</tr>
+<tr>
+<td>2xx (Successful)
+</td>
+<td>The operation was successful.
+</td>
+</tr>
+<tr>
+<td>3xx (Redirection)
+</td>
+<td>The client must perform an additional operation to get what it wants.
+</td>
+</tr>
+<tr>
+<td>4xx (Client-Side Error)
+</td>
+<td>There is a problem with the client's request.
+</td>
+</tr>
+<tr>
+<td>5xx (Server-Side Error)
+</td>
+<td>An error occurred on the server that prevented it from servicing the request.
+</td>
+</tr>
+</tbody>
+</table>
+<p>Here are some of the most common response status codes:
+</p>
+<table border="1" cellpadding="3" cellspacing="0">
+
+<tbody>
+<tr>
+<th>Status Code
+</th>
+<th>Description
+</th>
+</tr>
+<tr>
+<td>200 (OK)
+</td>
+<td>The call was serviced successfully.
+</td>
+</tr>
+<tr>
+<td>201 (Created)
+</td>
+<td>A resource was created at the location specified in the Location header.
+</td>
+</tr>
+<tr>
+<td>202 (Accepted)
+</td>
+<td>Request was accepted and is being processed. Typically returned in response to long running processes.
+</td>
+</tr>
+<tr>
+<td>204 (No Content)
+</td>
+<td>The call was serviced successfully but there is no content to return.
+</td>
+</tr>
+<tr>
+<td>206 (Partial Content)
+</td>
+<td>Only part of the requested content can be returned at this time.
+</td>
+</tr>
+<tr>
+<td>301 (Moved Permanently)
+</td>
+<td>The requested resource has permanently moved to the URI as specified in the Location header.
+</td>
+</tr>
+<tr>
+<td>304 (Not Modified)
+</td>
+<td>Client included an <code>If-Modified-Since</code> header in the request but resource hasn't changed since that time.
+</td>
+</tr>
+<tr>
+<td>307 (Temporary Redirect)
+</td>
+<td>The requested resource has temporarily moved to the URI specified in the Location header.
+</td>
+</tr>
+<tr>
+<td>400 (Bad Request)
+</td>
+<td>Client error indicating that the request was not properly formatted.
+</td>
+</tr>
+<tr>
+<td>401 (Unauthorized)
+</td>
+<td>The client attempted to operate on the requested resource without providing the required credentials.
+</td>
+</tr>
+<tr>
+<td>404 (Not Found)
+</td>
+<td>The requested resource does not exist.
+</td>
+</tr>
+<tr>
+<td>409 (Conflict)
+</td>
+<td>The request would have put the server into an invalid state.
+</td>
+</tr>
+<tr>
+<td>500 (Internal Server Error)
+</td>
+<td>An error occurred on the server when attempting to satisfy the request.
+</td>
+</tr>
+<tr>
+<td>501 (Not Implemented)
+</td>
+<td>The specified HTTP method is not supported for the requested resource.
+</td>
+</tr>
+</tbody>
+</table>
+<p>In addition to the status code, the response may contain a
+Content-Type header. This header indicates the type of content
+contained in the body of the response (e.g., image, XML, JSON, etc.).
+To illustrate, here is a typical HTTP response that uses the
+Content-Type header to indicate that the body of the response is in XML
+format:
+</p>
+<pre>HTTP/1.1 200 OK<br>Date: Thu, 5 Jun 2008 06:25:24 GMT<br>Content-Type: application/xml<br><br>&lt;Books&gt;<br>    &lt;Book&gt;<br>        &lt;Title&gt;Inside Servlets&lt;/Title&gt;<br>        &lt;URI&gt;http://http://www.amazon.com/Inside-Servlets-Server-Side-Programming-Platform/dp/0201709066/ref=sr_1_1?ie=UTF8&amp;qid=1321917641&amp;sr=8-1&lt;/URI&gt;<br>    &lt;/Book&gt;<br>&lt;/Books&gt;<br></pre>
+<p>In response to a GET request, a representation of the requested
+resource is returned to the client. Similar to the request body, the
+format of this representation is service-specific. The service consumer
+must refer to documentation provided by the service provider in order
+to determine how the body of the response is to be interpreted.
+</p>
+<p>Some REST service calls may not return anything within the body
+of the message. For example, in response to a POST request to create a
+new resource, the service will typically just respond with a message
+indicating that the resource was requested and the location of the new
+resource as illustrated here:
+</p>
+<pre>HTTP/1.1 201 Created<br>Date: Thu, 5 Jun 2008 06:25:24 GMT<br>Location: http://www.sourcestream.com/books/12345<br></pre>
+<p>The response above indicates that a new book resource was
+successfully created and is available at the URI indicated by the
+Location header.
+</p>
+<h3> Document the REST API </h3>
+<p>Now that you understand the different parts of a REST service's
+request and response, you're ready to define an API that will be
+exposed to service consumers. It is recommended to begin by defining
+the different parts (nouns) in the system and then determine which of
+the HTTP actions need to be performed on each. For instance, in the
+library example presented earlier, there are two objects that can be
+acted on: books and reviews. We can consider these two objects as the
+resources upon which REST service clients will be acting. The
+operations that we implement will be determined by the use cases that
+the service must support. For instance, the user should be able to
+create, read, update, and delete both books and reviews. This means
+that we'll implement support for GET, PUT or POST, and DELETE for each
+resource. Here is a list of operations that the library service will
+support:
+</p>
+<table border="1" cellpadding="3" cellspacing="0">
+
+<tbody>
+<tr>
+<th>Operation
+</th>
+<th>HTTP Method
+</th>
+<th>URI
+</th>
+<th>Request Body
+</th>
+<th>Response Body
+</th>
+<th>HTTP Status Codes
+</th>
+</tr>
+<tr>
+<td>Get a book
+</td>
+<td>GET
+</td>
+<td><code>/books/{ISBN}</code>
+</td>
+<td>None
+</td>
+<td>XML representation of a book
+</td>
+<td>200 (OK), 404 (Not Found)
+</td>
+</tr>
+<tr>
+<td>Get list of all books
+</td>
+<td>GET
+</td>
+<td><code>/books</code>
+</td>
+<td>None
+</td>
+<td>XML representation of all books
+</td>
+<td>200 (OK), 404 (Not Found)
+</td>
+</tr>
+<tr>
+<td>Create a book
+</td>
+<td>PUT
+</td>
+<td><code>/books/{ISBN}</code>
+</td>
+<td>XML representation of a book
+</td>
+<td>None
+</td>
+<td>201 (Created), 400 (Bad Request)
+</td>
+</tr>
+<tr>
+<td>Replace a book
+</td>
+<td>PUT
+</td>
+<td><code>/books/{ISBN}</code>
+</td>
+<td>XML representation of a book
+</td>
+<td>None
+</td>
+<td>200 (OK), 400 (Bad Request)
+</td>
+</tr>
+<tr>
+<td>Delete a book
+</td>
+<td>DELETE
+</td>
+<td><code>/books/{ISBN}</code>
+</td>
+<td>None
+</td>
+<td>None
+</td>
+<td>200 (OK), 404 (Not Found)
+</td>
+</tr>
+<tr>
+<td>Get a book review
+</td>
+<td>GET
+</td>
+<td><code>/books/{ISBN}/reviews/{id}</code>
+</td>
+<td>None
+</td>
+<td>XML representation of a book review
+</td>
+<td>200 (OK), 404 (Not Found)
+</td>
+</tr>
+<tr>
+<td>Get all reviews for a book
+</td>
+<td>GET
+</td>
+<td><code>/books/{ISBN}/reviews</code>
+</td>
+<td>None
+</td>
+<td>XML representation of all reviews for a book
+</td>
+<td>200 (OK), 404 (Not Found)
+</td>
+</tr>
+<tr>
+<td>Create a book review
+</td>
+<td>POST
+</td>
+<td><code>/books/{ISBN}/reviews</code>
+</td>
+<td>XML representation of a book review
+</td>
+<td>None
+</td>
+<td>201 (Created), 400 (Bad Request)
+</td>
+</tr>
+<tr>
+<td>Update a book review
+</td>
+<td>PUT
+</td>
+<td><code>/books/{ISBN}/reviews/{id}</code>
+</td>
+<td>XML representation of a book review
+</td>
+<td>None
+</td>
+<td>200 (OK), 404 (Not Found)
+</td>
+</tr>
+<tr>
+<td>Delete a book review
+</td>
+<td>DELETE
+</td>
+<td><code>/books/{ISBN}/reviews/{id}</code>
+</td>
+<td>None
+</td>
+<td>None
+</td>
+<td>200 (OK), 404 (Not Found)
+</td>
+</tr>
+</tbody>
+</table>
+<p>Another common way to document a REST API is to use a table showing
+the available REST actions across the top and the resources upon which
+actions are performed on the left like this:
+</p>
+<table border="1" cellpadding="3" cellspacing="0">
+
+<tbody>
+<tr>
+<th>
+<br>
+</th>
+<th>GET
+</th>
+<th>POST
+</th>
+<th>PUT
+</th>
+<th>DELETE
+</th>
+</tr>
+<tr>
+<td><b>Books</b>
+</td>
+<td><code>/books<br>
+/books/{ISBN}</code>
+</td>
+<td>
+<br>
+</td>
+<td><code>/books/{ISBN}</code>
+</td>
+<td><code>/books/{ISBN}</code>
+</td>
+</tr>
+<tr>
+<td><b>Reviews</b>
+</td>
+<td><code>/books/{ISBN}/reviews<br>
+/books/{ISBN}/reviews/{id}</code>
+</td>
+<td><code>/books/{ISBN}/reviews</code>
+</td>
+<td><code>/books/{ISBN}/reviews/{id}</code>
+</td>
+<td><code>/books/{ISBN}/reviews/{id}</code>
+</td>
+</tr>
+</tbody>
+</table>
+<h2><br>
+ </h2>
+<h2>Create the REST Service </h2>
+<p>We will now create a REST service that allows the user to create,
+retrieve, update, and delete books from a library. Adding support for
+book reviews as shown in the REST API is an exercise that is left to
+the reader.
+</p>
+<p>JAX-RS makes creating a RESTful web services very simple. Start
+by annotating a class with path information that maps a request's URI
+to the class that should process the request. For example, consider the
+following class:
+</p>
+<pre>@Path("/library")<br>public class Library<br>{<br>    //implementation here...<br>}<br></pre>
+<p>The <code>@Path</code> annotation indicates that requests beginning with <code>/library</code>
+should be routed to this class for processing. For instance, any of the
+following requests would be passed to the Library class:
+</p>
+<pre>GET http://{server}/MyRestService/library/books<br>GET http://{server}/MyRestService/library/books/1234<br>POST http://{server}/MyRestService/library/books/1234<br>DELETE http://{server}/MyRestService/library/books/1234<br></pre>
+<p>Note that the path information begins immediately following the web
+application's context name. In this case, the application's context
+name is MyRestService.
+</p>
+<h3> Create the GET Methods </h3>
+<p>After creating an annotated class, we are ready to create methods to
+return information to the web service client. We'll start by defining
+two methods that return information about the books available to the
+library service.
+</p>
+<pre>@GET<br>@Path("/books")<br>@ProduceMime("application/xml")<br>public String getBooks()<br>{<br>    //implementation here...<br>}<br><br>@GET<br>@Path("/books/{isbn}")<br>@ProduceMime("application/xml")<br>public String getBook(@PathParam("isbn")String id)<br>{<br>    //implementation here...<br>}<br></pre>
+<p>Now let's examine these two methods in detail. The first method,
+getBooks(), indicates that it should be called in response to an HTTP
+GET (note the <code>@GET</code> annotation) to the <code>/library/books</code> resource. Why <code>/library/books</code> and not just "/books" as stated in the <code>@Path</code>
+annotation? Because the path information specified by each individual
+method is appended to the path information supplied by its class. In
+this case, the Library class specified a path of <code>/library</code> and the getBooks() indicated <code>/books</code>. Lastly, the <code>@ProduceMime</code>
+annotation tells the JAX-RS container that this method returns XML and,
+therefore, the Content-Type header in the response should be set to <code>application/xml</code>.
+</p>
+<p>The next method, getBook(), is a little more complex. From the
+annotations on this method we can see that it is called to process HTTP
+GET requests to the <code>/library/books/{isbn}</code> URI. This URI matches any URI that includes a value after the <code>/library/books/</code> path. The <code>@Path</code> annotation names this value "isbn". Once named, the value can be referenced from other annotations. In this case, the <code>@PathParam("isbn")</code> parameter annotation tells the server to parse the last value out of the URI and assign it to the method parameter <code>id</code>. This kind of automatic assignment is a type of <i>inversion of control</i> (IOC) known as <i>dependency injection</i>.
+Rather than the code having to retrieve the isbn value from the URI,
+the container "injects" the value into the code via its method
+parameter.
+</p>
+<p>In addition to the path portion of the URI, you can also inject values from the query string into a method parameter like this:
+</p>
+<pre>@GET<br>@Path("/users")<br>public String getUser(@QueryParam("id")String userId)<br>{<br>    //implementation here...<br>}<br></pre>
+<p>Therefore, given a URI like <code>/users?id=1234</code>, the <code>getUser()</code> method's <code>userId</code>
+parameter would be assigned a value of 1234. That's all for the GET
+methods. For more information, you can examine their full
+implementation at <a href="https://sites.google.com/site/drcallaway/files/Library.java?attredirects=0" rel="nofollow" title="Library REST Sample">Library REST Sample</a> or in the sample project file available below.
+</p>
+<h3> Create the PUT Method </h3>
+<p>The next method we'll create will allow the client to add or update
+a book. In this case, the same method supports both add and update
+because it processes PUT requests. Remember that PUT requests either
+create or replace a resource. Therefore, the method implementation is
+often very similar, if not identical. This is due to the fact that
+either operation may simply require the implementation to create a
+resource and add it to a collection. If the resource already existed,
+it is overwritten. If not, the new resource is added. Here's the
+definition for the create/update method:
+</p>
+<pre>@PUT<br>@Path("/books/{isbn}")<br>@ConsumeMime("application/xml")<br>public Response addUpdateBook(@PathParam("isbn")String isbn, String body)<br>{<br>    //implementation here...<br>}<br></pre>
+<p>This method is very similar to getBooks() except that it processes PUT requests rather than GET. Note that the value following <code>/books/</code> in the URI is named "isbn" and this value is injected into the method parameter of the same name. The <code>@ConsumeMime</code>
+annotation indicates that this method expects to be passed some content
+in XML format. So, how do we get the content out of the HTTP request?
+The way to do this is to declare a single String parameter that is not
+annotated for dependency injection. The body of the request will
+automatically be injected in this parameter.
+</p>
+<p>Notice that this method returns a <code>javax.ws.rs.core.Response</code>
+object. Returning this object allows the method to control the HTTP
+status code and headers returned in the response. In this case, the
+response's status code is altered based on whether an add or update
+operation took place. To illustrate, here is a small snippet of the
+implementation:
+</p>
+<pre>if (books.containsKey(isbn))<br>{<br>    response = Response.status(200).build(); //updated<br>}<br>else<br>{<br>    response = Response.status(201).build(); //created<br>}<br></pre>
+<p>As you can see, if the book that was passed already existed, the
+response status code is set to 200 (OK). If the book did not exist
+previously, the status code is set to 201 (Created). See the full
+implementation at <a href="https://sites.google.com/site/drcallaway/files/Library.java?attredirects=0" rel="nofollow" title="Library REST Sample">Library REST Sample</a> or in the sample project presented below for more information.
+</p>
+<h3> Create the DELETE Method </h3>
+<p>Last we'll create the method that allows the client to delete books
+from the library. The definition for this method looks like this:
+</p>
+<pre>@DELETE<br>@Path("/books/{isbn}")<br>public Response removeBook(@PathParam("isbn")String isbn)<br>{<br>    //implementation here...<br>}<br></pre>
+<p>From this definition, we can see that this method process HTTP DELETE methods (based on the <code>@DELETE</code> annotation) passed to the <code>/library/books/{isbn}</code>
+path. Again, the book's ISBN value is automatically extracted from the
+URI and injected in the method's isbn parameter. The complete method
+implementation is available at <a href="https://sites.google.com/site/drcallaway/files/Library.java?attredirects=0" rel="nofollow" title="Library REST Sample">Library REST Sample</a> or in the sample project below. <br>
+</p>
+<p><br>
+</p>
+<h2>Create a Test Application </h2>
+<p>The RestEasy implementation of JAX-RS includes a client library that
+makes creating REST clients quick and easy. The client library is easy
+to learn because it uses the same JAX-RS annotations as the REST
+service except their meaning is reversed. For example, the <code>@Path</code> annotation in a service method maps requests to the method based on their URI. In contrast, the <code>@Path</code> annotation in a client method indicates the URI to which an HTTP request should be sent.
+</p>
+<h3> Client Interface </h3>
+<p>To create a RestEasy client application, start by creating an
+interface that describes the remote services that you'd like to call.
+Let's look at a simple example:
+</p>
+<pre>import javax.ws.rs.*;<br>import javax.ws.rs.core.Response;<br>import org.resteasy.spi.ClientResponse;<br><br>@Path("library")<br>public interface TestClient<br>{<br>    @GET<br>    @Path("books")<br>    @ProduceMime("application/xml")<br>    String getBooks();<br><br>    @POST<br>    @Path("books/{isbn}/reviews")<br>    @ConsumeMime("application/xml")<br>    @ProduceMime("application/xml")<br>    ClientResponse&lt;String&gt; createReview(@PathParam("isbn") String isbn, String body);<br><br>    @DELETE<br>    @Path("books/{isbn}")<br>    Response.Status deleteBook(@PathParam("isbn") String isbn);<br>}<br></pre>
+<p>The annotations in this example work similarly to the way they do in a service class. The <code>@Path("library")</code> class annotation indicates the "base URI" upon which the rest of the <code>@Path</code> annotations will build. Now let's examine each of the methods.
+</p>
+<p>The <code>getBooks()</code> method is annotated to indicate that it should send an HTTP GET request to the <code>library/books</code> URI (the <code>library</code> portion of the URI comes from the class's <code>@Path</code> annotation). The <code>@ProduceMime</code> annotation denotes that this method returns an XML formatted string.
+</p>
+<p>The <code>createReview()</code> method is slightly more complex. This method's annotations indicate that it sends an HTTP POST request to the <code>library/books/{isbn}/reviews</code> URI. Notice that this URI includes the <code>{isbn}</code>
+path parameter. In a service method, the value of this parameter is
+extracted from the URI and injected into the associated method
+parameter. The path parameter is associated with a method parameter
+using the <code>@PathParam</code> annotation. For client methods, this
+process works in reverse. Rather than extracting the value from the URI
+and injecting it into the method parameter, the value is extracted from
+the method parameter and injected into the URI. It is this fully
+constructed URI to which the request is then sent. So, to create a new
+review for a book with ISBN number 12345, the client application would
+simply call the <code>createReview()</code> method like this:
+</p>
+<pre>ClientResponse&lt;String&gt; response = client.createReview("12345", "&lt;Review&gt;Great book!&lt;/Review&gt;");<br></pre>
+<p>As you would expect, this call will generate a POST request to the <code>library/books/12345/reviews</code> URI. Don't worry about the <code>client</code> object for now. We'll see how that is created in the next section.
+</p>
+<p>Now let's look at the <code>createReview()</code> method's second parameter, <code>body</code>.
+Remember how the non-annotated parameter in a service method represents
+the body of the request? It is the same with the client. Only one
+non-annotated parameter is allowed per method and that parameter
+represents the body of the HTTP request. Similarly, the <code>@ConsumeMime</code> and <code>@ProduceMime</code> annotations also work the same as they do on the server-side. The <code>@ConsumeMime</code> annotation corresponds to the body of the request and <code>@ProduceMime</code> corresponds to the body of the response. In the example above, the <code>@ConsumeMime</code> and <code>@ProduceMime</code> annotations indicate that the <code>createReview()</code> method accepts (or consumes) XML in its <code>body</code> parameter and returns (or produces) an XML formatted string.
+</p>
+<p>Finally, let's look at the return type. You may have noticed that the return type for <code>createReview()</code> isn't just a normal string that contains the response body. Rather, the return type is declared as <code>ClientResponse&lt;String&gt;</code>. Why not just use <code>String</code> here? The answer is that <code>ClientResponse</code>
+is used whenever the client may be interested in more than just the
+body of the response. For example, this object provides additional
+information about the response including its status code and all HTTP
+headers. The <code>&lt;String&gt;</code> portion of the <code>ClientResponse&lt;String&gt;</code> return type indicates that the request body (also called the <i>entity</i>) is stored in the <code>ClientResponse</code> as a string. Here's how you could use the <code>ClientResponse</code> object to display the status code in addition to the body of the response:
+</p>
+<pre>ClientResponse&lt;String&gt; response = client.createReview("12345", "&lt;Review&gt;Great book!&lt;/Review&gt;");<br><br>System.out.println("HTTP Status Code: " + response.getStatus());<br>System.out.println("HTTP Status Message: " + Response.Status.fromStatusCode(response.getStatus()).toString());<br>System.out.println("Body: " + response.getEntity().toString());<br></pre>
+<p>Last, let's briefly examine the <code>deleteBook()</code> method. There's nothing new here accept for the <code>Response.Status</code>
+return type. Since the response to a DELETE operation is typically
+empty (does not contain any body information), we can directly return
+the HTTP status code rather than require the client to retrieve it from
+within a <code>ClientResponse</code> object. Here's how we could go about showing the results of a DELETE operation:
+</p>
+<pre>Response.Status status = client.deleteBook("12345");<br><br>System.out.println("HTTP Status Code: " + status.getStatusCode();<br>System.out.println("HTTP Status Message: " + status.toString());<br></pre>
+<p>Also notice that the <code>deleteBook()</code> method is not annotated with either <code>@ConsumeMime</code> or <code>@ProduceMime</code> because the body of both its request and response is empty.
+</p>
+<h3> Client Application </h3>
+<p>Now that we have a REST client interface defined, let's create an
+application that uses it to test our REST service. The RestEasy client
+library uses a Java mechanism known as a <i>dynamic proxy</i> to
+construct a concrete instance of our interface according to the
+annotations we defined. It seems a little like magic but, fortunately,
+we don't have to worry about how the <code>TestClient</code> instance
+is created "under the hood". We just ask the RestEasy framework to
+create a REST client object based on our interface and it happens! Here
+is a simple client application that uses the interface we created in
+the last section:
+</p>
+<pre>import org.resteasy.spi.ResteasyProviderFactory;<br>import org.resteasy.plugins.providers.RegisterBuiltin;<br>import org.resteasy.plugins.client.httpclient.ProxyFactory;<br><br>public class TestApp<br>{<br>    public static void main(String[] args)<br>    {<br>        //the following two initialization statements only need to be executed once per VM<br>        ResteasyProviderFactory.initializeInstance();<br>        RegisterBuiltin.register(ResteasyProviderFactory.getInstance());<br><br>        //note that "MyRestService" is the context assigned to the service's web application<br>        TestClient client = ProxyFactory.create(TestClient.class, "http://localhost:8080/MyRestService");<br><br>        System.out.println(client.getBooks());<br><br>        System.out.println(client.createReview("12345", "&lt;Review&gt;Great book!&lt;/Review&gt;").getEntity());<br>    }<br>}<br></pre>
+<p>The first two lines in the <code>main()</code> method are
+boiler-plate initialization calls that must be made before attempting
+to create a REST service proxy. These static calls need only be
+executed once per virtual machine. The <code>ProxyFactory.create()</code> method is where the magic happens and a fully functional instance of our <code>TestClient</code> interface is created. Notice that the second parameter to the <code>create()</code>
+method conveys the location of the REST service. Once created, we can
+simply call methods on the service proxy like we would on any POJO. <br>
+</p>
+<p><br>
+</p>
+<h2>Create a Test HTML Page </h2>
+<p>One advantage of REST services over SOAP is that they can be tested
+from a simple HTML page within a browser. A page like this is usually
+placed in the root of the REST web service application and named
+something like <code>index.html</code> or <code>test.html</code>. The file can then be accessed from a browser at a URI like this:
+</p>
+<p><code>http://localhost:&lt;port&gt;/&lt;context&gt;/index.html</code>
+</p>
+<p>Let's take a look at how this an HTML page is created to test each of the methods supported by the sample REST service.
+</p>
+<h3> Get Books </h3>
+<p>As documented above, the get books REST service call looks like this:
+</p>
+<pre>GET http://&lt;server&gt;/&lt;context&gt;/library/books</pre>
+<p>Since hyperlinks always use the HTTP GET method, this service call is easily made available by one line in an HTML page:
+</p>
+<pre>&lt;a href="library/books"&gt;Get All Books&lt;/a&gt;<br></pre>
+<p>For instance, if the above line was stored in a file named <code>index.html</code> that was stored at the root of a REST web application, the test HTML file could be invoked from a browser with this URI:
+</p>
+<p><code>http://localhost/&lt;context&gt;/index.html</code>
+</p>
+<p>Where <code>&lt;context&gt;</code> is the servlet context name
+under which the web application is deployed. Once this page has been
+loaded by the browser, it remembers its current location and will apply
+this location to any relative paths referenced from the browser. That's
+what happens with the "Get All Books" hyperlink above. This hyperlink
+uses a relative path of <code>library/books</code>. The browser will automatically make this path relative to the location of the <code>index.html</code> file that it just loaded. Hence, the hyperlink effectively references the URI: <code>http://localhost/&lt;context&gt;/library/books</code>
+</p>
+<h3> Get Book </h3>
+<p>The HTML to test the "Get Book" functionality is slightly more
+complex because the user must be prompted for the ISBN of the book to
+retrieve. To accomplish this, we'll need to use an HTML form, input
+box, button, and a little JavaScript to collect and submit the
+information to the REST service. The HTML for this feature looks like
+this:
+</p>
+<pre>&lt;form name="GetBook" method="GET"&gt;<br>    &lt;table border="0"&gt;<br>        &lt;tr&gt;&lt;th colspan="2" align="left"&gt;Get Book&lt;/td&gt;&lt;/tr&gt;<br>        &lt;tr&gt;<br>            &lt;td&gt;ISBN:&lt;/td&gt;&lt;td&gt;&lt;input type="text" name="isbn"&gt;&lt;/td&gt;<br>        &lt;/tr&gt;<br>        &lt;tr&gt;<br>            &lt;td&gt;&lt;/td&gt;<br>            &lt;td&gt;<br>                &lt;input type="button" value="Get" onClick="GetBook.action='library/books/' + isbn.value;GetBook.submit()"&gt;<br>            &lt;/td&gt;<br>        &lt;/tr&gt;<br>    &lt;/table&gt;			<br>&lt;/form&gt;<br></pre>
+<p>You might be wondering why the JavaScript is necessary in the button's <code>onClick</code>
+attribute. The reason is that default browser behavior dictates that
+all values within a form that employs the GET method should be passed
+in the query string. That would result in a service call that looks
+like this:
+</p>
+<pre>GET http://localhost/&lt;context&gt;/library/books?isbn=12345<br></pre>
+<p>Unfortunately, this is not the format defined by the "get book" REST
+service. Rather, the isbn number should be part of the path. To
+accomplish this, the JavaScript sets the form's <code>action</code>
+attribute (which represents the URI to which the form should be
+submitted) to include the ISBN value and then submits the form. If a
+book with the given ISBN value exists, its representation will be
+returned in XML format. Otherwise, an HTTP status code of 404 (Not
+Found) is returned.
+</p>
+<h3> Add or Update Book </h3>
+<p>The "add or update book" REST service is a bit trickier to test
+since it uses the HTTP PUT method. Unfortunately, PUT (as well as
+DELETE) is not supported by standard HTML. Contrast that with GET and
+POST which are both natively supported by HTML forms and are easily
+implemented by setting the form's <code>method</code> attribute to
+"GET" or "POST". Setting a form's method to "PUT" or "DELETE" is
+ignored and will cause the browser to use the default GET method.
+</p>
+<p>So, how can we test PUT and DELETE service calls from an HTML
+page? In a word, the answer is JavaScript. JavaScript allows us to make
+Ajax requests that support all HTTP methods. Let's see how this is done
+in the HTML:
+</p>
+<pre>&lt;form name="AddUpdateBook"&gt;<br>    &lt;table border="0"&gt;<br>        &lt;tr&gt;&lt;th colspan="2" align="left"&gt;Add or Update Book&lt;/th&gt;&lt;/tr&gt;<br>        &lt;tr&gt;<br>            &lt;td colspan="2"&gt;(If book with given ISBN already exists, it will be updated. Otherwise it will be added.)&lt;/td&gt;<br>        &lt;/tr&gt;<br>        &lt;tr&gt;<br>            &lt;td width="10%"&gt;ISBN:&lt;/td&gt;&lt;td width="90%"&gt;&lt;input type="text" name="isbn"&gt;&lt;/td&gt;<br>        &lt;/tr&gt;<br>        &lt;tr&gt;<br>            &lt;td&gt;Book Title:&lt;/td&gt;&lt;td&gt;&lt;input type="text" name="name"&gt;&lt;/td&gt;<br>        &lt;/tr&gt;<br>        &lt;tr&gt;<br>            &lt;td&gt;&lt;/td&gt;<br>            &lt;td&gt;<br>                &lt;input type="button" value="Add/Update" onClick="addUpdateBook(AddUpdateBook.isbn.value, AddUpdateBook.name.value); return false;"&gt;<br>            &lt;/td&gt;<br>        &lt;/tr&gt;<br>    &lt;/table&gt;<br>&lt;/form&gt;<br></pre>
+<p>In the HTML above, we collect the information on a book to be added
+or updated using standard HTML form elements. However, rather than
+submitting the form as usual, we make a call to a JavaScript method
+called <code>addUpdateBook(isbn, title)</code>. This JavaScript function looks like this:
+</p>
+<pre>function addUpdateBook(isbn, title)<br>{<br>    var xmlHttp = getXmlHttp();<br>	<br>    xmlHttp.onreadystatechange=function()<br>    {<br>        if (xmlHttp.readyState==4)<br>        {<br>            alert("Operation complete.");<br>        }<br>    }<br><br>    xmlHttp.open("PUT", "library/books/" + isbn, true);<br>    xmlHttp.send("&lt;Book isbn=\"" + isbn + "\"&gt;" + title + "&lt;/Book&gt;");<br>}<br></pre>
+<p>We won't go into too much detail about Ajax programming but notice how this JavaScript invokes a PUT request to the <code>library/books/&lt;ISBN&gt;</code> path (see the <code>xmlHttp.open()</code> function call) and includes an XML representation of a book in the body of the request (see the <code>xmlHttp.send()</code> method call). The function assigned to the <code>xmlHttp.onreadystatechange</code> property simply displays a popup box that indicates when the operation has completed.
+</p>
+<p>You might be wondering about that mysterious <code>getXmlHttp()</code> function referenced above. This function simply creates the correct Ajax object (<code>ActiveXObject</code> for Internet Explorer and <code>XmlHttpRequest</code> for all other browsers) based on the client's browser. This method is as follows:</p>
+<pre>function getXmlHttp()<br>{<br>    <span>var</span> xmlhttp = <span>false</span>;<br><br>  <span>  if</span> (window.XMLHttpRequest)<br>    {<br>        xmlhttp = <span>new</span> XMLHttpRequest()<br>    }<br>  <span>  else</span> <span>if</span> (window.ActiveXObject) <span>//</span><span>code for IE</span><br>    {<br>      <span>try</span><br>      {<br>          xmlhttp = <span>new</span> ActiveXObject(<span>"</span><span>Msxml2.XMLHTTP"</span>)<br>      }<br>      <span>catch</span> (e)<br>      {<br>      <span>    try</span><br>          {<br>              xmlhttp = <span>new</span> ActiveXObject(<span>"</span><span>Microsoft.XMLHTTP"</span>)<br>          }<br>          <span>catch</span> (E)<br>          {<br>              xmlhttp=false<br>          }<br>      }<br>  }<br><br>  <span>return</span> xmlhttp;<br>}<br></pre>
+<h3>Delete Book </h3>
+<p>As mentioned in the previous section, the HTTP DELETE method is not
+supported by standard HTML so we must resort to JavaScript in order to
+make DELETE requests. The HTML portion of the DELETE test looks like
+this:
+</p>
+<pre>&lt;form name="DeleteBook"&gt;<br>    &lt;table border="0"&gt;<br>        &lt;tr&gt;&lt;th colspan="2" align="left"&gt;Delete Book&lt;/th&gt;&lt;/tr&gt;<br>        &lt;tr&gt;<br>            &lt;td&gt;ISBN:&lt;/td&gt;&lt;td&gt;&lt;input type="text" name="deleteIsbn"&gt;&lt;/td&gt;<br>        &lt;/tr&gt;<br>        &lt;tr&gt;<br>            &lt;td&gt;&lt;/td&gt;<br>            &lt;td&gt;<br>                &lt;input type="button" value="Delete" onClick="deleteBook(DeleteBook.deleteIsbn.value); return false;"&gt;<br>            &lt;/td&gt;<br>        &lt;/tr&gt;<br>    &lt;/table&gt;<br>&lt;/form&gt;<br></pre>
+<p>Similar to the "Add or Update Book" function, the "Delete Book"
+feature prompts the user for the ISBN of the book to delete and passes
+it to the <code>deleteBook()</code> JavaScript method. This method makes looks like this:
+</p>
+<pre>function deleteBook(isbn)<br>{<br>    var xmlHttp = getXmlHttp();<br>    <br>    xmlHttp.onreadystatechange=function()<br>    {<br>        if (xmlHttp.readyState==4)<br>        {<br>            alert("Operation complete.");<br>        }<br>    }<br><br>    xmlHttp.open("DELETE", "library/books/" + isbn, true);<br>    xmlHttp.send(null);<br>}<br></pre>
+<p>Similar to the <code>addUpdateBook()</code> method, this JavaScript invokes a DELETE request to the <code>library/books/&lt;ISBN&gt;</code> path (see the <code>xmlHttp.open()</code> method call) and includes nothing (null) in the body of the request (see the <code>xmlHttp.send()</code> method call). The function assigned to the <code>xmlHttp.onreadystatechange</code> property simply displays a popup box that indicates when the operation has completed. <br>
+</p>
+<p><br>
+</p>
+<h2> Sample Project </h2>
+<p>The sample project uses JBoss's <a href="http://wiki.jboss.org/wiki/RESTeasyJAXRS" rel="nofollow" title="http://wiki.jboss.org/wiki/RESTeasyJAXRS">RestEasy</a>
+implementation of JAX-RS. RestEasy is deployed as a standard JEE web
+application. To define a new service, simply drop a new JAX-RS
+annotated class into the RestEasy web application's <code>WEB-INF/classes</code> directory and redeploy. <br>
+</p>
+<p>Follow these steps to try out the sample REST service presented in this article:<br>
+</p>
+<ol><li>Retrieve the sample WAR file from <a href="https://sites.google.com/site/drcallaway/files/rest-service-sample.zip?attredirects=0">here</a>.</li>
+<li>
+Copy the WAR file to your <code>&lt;JBOSS_HOME&gt;/server/default/deploy</code> directory.</li>
+<li>Start JBoss (execute the <code>run</code> script in the <code>&lt;JBOSS_Home&gt;/bin</code> directory).</li>
+<li>
+Invoke this URI from a browser: http://localhost:8080/SampleService/index.html</li>
+<li>
+Test the REST service functions using the HTML test page.</li>
+</ol>
+<p>
+</p>
